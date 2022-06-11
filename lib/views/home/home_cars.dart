@@ -7,40 +7,37 @@ import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_details.dart';
 import 'package:wandering_wheels/views/home/widgets/car_card.dart';
 
-class HomeCars extends StatefulWidget {
-  const HomeCars({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<HomeCars> createState() => _HomeCarsState();
-}
-
-class _HomeCarsState extends State<HomeCars> {
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      await context.read<CarProvider>().fetchCars();
-    });
-    super.initState();
-  }
+class HomeCars extends StatelessWidget {
+  const HomeCars({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CarProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
-          return const Center(
-            child: CupertinoActivityIndicator(),
+          return SizedBox(
+            height: 40.w,
+            width: 100.w,
+            child: const Center(
+              child: CupertinoActivityIndicator(),
+            ),
           );
         }
-
         if (provider.cars.isEmpty) {
-          return const Center(
-            child: Text("No cars found"),
+          return SizedBox(
+            height: 40.w,
+            width: 100.w,
+            child: Center(
+              child: Text(
+                "No cars found",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
           );
         }
-        log(provider.cars.length.toString());
         return SizedBox(
           height: 40.w,
           width: 100.w,

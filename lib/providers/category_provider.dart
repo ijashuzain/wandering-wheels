@@ -21,9 +21,9 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   fetchCategories() async {
-    categories = [];
     setLoading(true);
     var ref = await db.collection('categories').get();
+    categories = [];
     for (var doc in ref.docs) {
       Category category = Category.fromJson(doc.data());
       categories.add(category);

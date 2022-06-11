@@ -12,6 +12,7 @@ class CarProvider extends ChangeNotifier {
   bool isUploadingImage = false;
   bool isUploadingCar = false;
   List<Car> cars = [];
+  List<Car> categoryCars = [];
   Car? currentCar;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -21,9 +22,9 @@ class CarProvider extends ChangeNotifier {
   }
 
   fetchCars() async {
-    cars = [];
     setCarLoading(true);
     var ref = await db.collection('cars').get();
+    cars = [];
     for (var doc in ref.docs) {
       Car car = Car.fromJson(doc.data());
       cars.add(car);
@@ -91,9 +92,9 @@ class CarProvider extends ChangeNotifier {
     }
   }
 
-  void fetchCarsByCategory(Category category) {
-    fetchCars();
-    cars = cars.where((element) => category.name == element.category).toList();
+  fetchCarsByCategory(Category category) async {
+    await fetchCars();
+    categoryCars = cars.where((element) => category.name == element.category).toList();
     notifyListeners();
   }
 

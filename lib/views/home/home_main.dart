@@ -1,16 +1,8 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:wandering_wheels/providers/car_provider.dart';
-import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
-import 'package:wandering_wheels/views/car_details/car_details.dart';
-import 'package:wandering_wheels/views/car_details/car_list.dart';
 import 'package:wandering_wheels/views/home/home_cars.dart';
-import 'package:wandering_wheels/views/home/widgets/car_card.dart';
-import 'package:wandering_wheels/views/home/widgets/category_card.dart';
+import 'package:wandering_wheels/views/home/home_categories.dart';
 import 'package:wandering_wheels/views/home/widgets/greetings_widget.dart';
 import 'package:wandering_wheels/views/home/widgets/search_widget.dart';
 import 'package:wandering_wheels/widgets/heading.dart';
@@ -63,41 +55,7 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 1.h),
-                Consumer<CategoryProvider>(builder: (context, provider, child) {
-                  if (provider.isLoading) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
-
-                  if (provider.categories.isEmpty) {
-                    return const Center(
-                      child: Text("No categories found"),
-                    );
-                  }
-                  return SizedBox(
-                    width: 100.w,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: provider.categories.length,
-                      itemBuilder: (context, index) {
-                        return CategoryCard(
-                          categoryName: provider.categories[index].name,
-                          categoryImage: provider.categories[index].image,
-                          avilableCars: "1",
-                          onTap: () {
-                            provider
-                                .setCurrentCatagory(provider.categories[index]);
-                            context.read<CarProvider>().fetchCarsByCategory(
-                                provider.categories[index]);
-                            Navigator.pushNamed(context, CarList.routeName);
-                          },
-                        );
-                      },
-                    ),
-                  );
-                }),
+                const HomeCategory(),
               ],
             ),
           ),
@@ -106,4 +64,5 @@ class Home extends StatelessWidget {
     );
   }
 }
+
 

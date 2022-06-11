@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
-import 'package:wandering_wheels/models/category_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
-import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_create.dart';
 import 'package:wandering_wheels/views/car_details/car_details.dart';
 import 'package:wandering_wheels/views/home/widgets/car_card.dart';
@@ -14,7 +12,9 @@ class CarList extends StatelessWidget {
   static String routeName = "/car_list";
 
   final bool isEdit;
-  const CarList({Key? key, this.isEdit = false}) : super(key: key);
+  final bool isCategory;
+  const CarList({Key? key, this.isEdit = false, this.isCategory = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +39,24 @@ class CarList extends StatelessWidget {
           : null,
       body: Consumer<CarProvider>(
         builder: (context, provider, child) {
+          var cars = isCategory ? provider.categoryCars : provider.cars;
           if (provider.isLoading) {
             return const Center(
               child: CupertinoActivityIndicator(),
             );
           }
+          if (cars.isEmpty) {
+            return  Center(
+              child: Text(
+                "No cars found",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: 12.sp,
+                ),
+              ),
+            );
+          }
+
           return SizedBox(
             height: 100.h,
             width: 100.w,
@@ -58,15 +71,23 @@ class CarList extends StatelessWidget {
                         crossAxisCount: 3,
                         mainAxisSpacing: 3.h,
                       ),
-                      itemCount: provider.cars.length,
+                      itemCount: cars.length,
                       itemBuilder: (context, index) {
                         return CarCard(
-                          carName: provider.cars[index].name,
-                          carImage: provider.cars[index].image!,
-                          carRate: provider.cars[index].rate.toString(),
+                          carName: cars[index].name,
+                          carImage: cars[index].image!,
+                          carRate: cars[index].rate.toString(),
                           onTap: () {
                             if (isEdit) {
-                              Navigator.pushNamed(context, CarCreate.routeName);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CarCreate(
+                                    car: cars[index],
+                                    isUpdate: true,
+                                  ),
+                                ),
+                              );
                             } else {
                               Navigator.pushNamed(
                                 context,

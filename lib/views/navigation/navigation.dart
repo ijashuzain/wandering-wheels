@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/management/manage_home.dart';
@@ -16,10 +15,10 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    MyBooking(),
-    ManageHome(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const Home(),
+    const MyBooking(),
+    const ManageHome(),
     Profile(),
   ];
 
