@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "118542655300",
+    "project_id": "wandering-wheels-884a8",
+    "storage_bucket": "wandering-wheels-884a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118542655300:android:1fbcc54ae87180a26dc111",
+        "android_client_info": {
+          "package_name": "com.app.wandering_wheels"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118542655300-ih39a7b6r1np5gm0mt3hnd6sc7uni2ep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1WP05YMNij5oeubQ40Gqq12OMEkr77YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118542655300-ih39a7b6r1np5gm0mt3hnd6sc7uni2ep.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "118542655300-eggj3farn35vf89kq1kb85rr0bdch1v6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wanderingWheels"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
