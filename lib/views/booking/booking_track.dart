@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 
-class RentalsTrack extends StatelessWidget {
+class BookingTrack extends StatelessWidget {
   static String routeName = "/rentals_track";
-  const RentalsTrack({Key? key}) : super(key: key);
+  const BookingTrack({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class RentalsTrack extends StatelessWidget {
       body: SizedBox(
         height: 100.h,
         width: 100.w,
-        child:  Center(
+        child: Center(
           child: Text(
             "This feature is under development",
             style: TextStyle(

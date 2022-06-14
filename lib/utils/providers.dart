@@ -7,7 +7,6 @@ import 'package:wandering_wheels/providers/cardetails_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/home_provider.dart';
 import 'package:wandering_wheels/providers/insurance_provider.dart';
-import 'package:wandering_wheels/providers/rental_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 
 List<SingleChildWidget> providers = [
@@ -17,7 +16,6 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => CarProvider()),
   ChangeNotifierProvider(create: (_) => CategoryProvider()),
   ChangeNotifierProvider(create: (_) => CarBookingProvider()),
-  ChangeNotifierProvider(create: (_) => RentalProvider()),
   ChangeNotifierProvider(create: (_) => AuthProvider()),
   ChangeNotifierProvider(create: (_) => UserProvider()),
 ];

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/constants/status.dart';
 
-class RentalCard extends StatelessWidget {
+class BookingCard extends StatelessWidget {
   final String driverName;
   final String carName;
   final String pickupDate;
@@ -10,7 +11,7 @@ class RentalCard extends StatelessWidget {
   final String status;
   final VoidCallback onTap;
 
-  const RentalCard({
+  const BookingCard({
     Key? key,
     required this.driverName,
     required this.carName,
@@ -56,7 +57,7 @@ class RentalCard extends StatelessWidget {
                         fontFamily: "Poppins",
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Container(
                       decoration: BoxDecoration(
                         color: kPrimaryColor,
@@ -71,7 +72,7 @@ class RentalCard extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(left: 2.w, right: 2.w),
                         child: Text(
-                          status,
+                          status.toString(),
                           style: TextStyle(
                             fontSize: 8.sp,
                             fontWeight: FontWeight.w500,
@@ -92,7 +93,7 @@ class RentalCard extends StatelessWidget {
                     fontFamily: "Poppins",
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   children: [
                     SizedBox(
@@ -107,7 +108,7 @@ class RentalCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Icon(Icons.arrow_forward),
+                    const Icon(Icons.arrow_forward),
                     SizedBox(
                       width: 25.w,
                       child: Padding(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/management/manage_home.dart';
-import 'package:wandering_wheels/views/my_booking/my_booking.dart';
+import 'package:wandering_wheels/views/booking/booking_my.dart';
 import 'package:wandering_wheels/views/profile/profile.dart';
 
 class Navigation extends StatefulWidget {
@@ -39,33 +41,37 @@ class _NavigationState extends State<Navigation> {
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 10,
-          type: BottomNavigationBarType.fixed,
-          iconSize: 30,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_added),
-              label: "Bookings"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.cases_sharp),
-              label: "Manage"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "Profile"
-            )
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: kPrimaryColor,
-          unselectedItemColor: Colors.grey[400],
-          onTap: _onItemTapped,
+        bottomNavigationBar: Consumer<UserProvider>(
+          builder: (context, provider,child) {
+            return BottomNavigationBar(
+              backgroundColor: Colors.white,
+              elevation: 10,
+              type: BottomNavigationBarType.fixed,
+              iconSize: 30,
+              items:  <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: "Home"
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.bookmark_added),
+                  label: "Bookings"
+                ),
+                if (provider.currentUser!.type == "Admin")  const BottomNavigationBarItem(
+                  icon: Icon(Icons.cases_sharp),
+                  label: "Manage"
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: "Profile"
+                )
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: kPrimaryColor,
+              unselectedItemColor: Colors.grey[400],
+              onTap: _onItemTapped,
+            );
+          }
         ),
       ),
     );

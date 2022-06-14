@@ -7,7 +7,7 @@ import 'package:wandering_wheels/views/car_details/car_list.dart';
 import 'package:wandering_wheels/views/category/category_list.dart';
 import 'package:wandering_wheels/views/management/widgets/manage_option_big.dart';
 import 'package:wandering_wheels/views/management/widgets/manage_option_small.dart';
-import 'package:wandering_wheels/views/rentals/rentals_main.dart';
+import 'package:wandering_wheels/views/booking/booking_main.dart';
 import 'package:provider/provider.dart';
 
 class ManageHome extends StatelessWidget {
@@ -57,11 +57,11 @@ class ManageHome extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 3.h, right: 3.h, left: 3.h),
                 child: ManageOptionBig(
-                  title: "Car Rentals",
+                  title: "All Bookings",
                   subtitle: "Currently 10 car rentals ongoing",
                   icon: Icons.car_rental,
                   onTap: () {
-                    Navigator.pushNamed(context, RentalsMain.routeName);
+                    Navigator.pushNamed(context, BookingAll.routeName);
                   },
                 ),
               ),
@@ -89,7 +89,7 @@ class ManageHome extends StatelessWidget {
                       title: "Cars",
                       subtitle: "Total 10 cars",
                       icon: Icons.car_repair_rounded,
-                      onTap: (){
+                      onTap: () {
                         context.read<CarProvider>().fetchCars();
                         Navigator.push(
                           context,

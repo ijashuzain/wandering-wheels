@@ -12,8 +12,8 @@ import 'package:wandering_wheels/starter.dart';
 import 'package:wandering_wheels/views/management/manage_home.dart';
 import 'package:wandering_wheels/views/navigation/navigation.dart';
 import 'package:wandering_wheels/views/profile/profile.dart';
-import 'package:wandering_wheels/views/rentals/rentals_main.dart';
-import 'package:wandering_wheels/views/rentals/rentals_track.dart';
+import 'package:wandering_wheels/views/booking/booking_main.dart';
+import 'package:wandering_wheels/views/booking/booking_track.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (_) => const StarterPage(),
@@ -27,8 +27,8 @@ final Map<String, WidgetBuilder> routes = {
   Profile.routeName: (_) => Profile(),
   CarList.routeName: (_) => CarList(),
   ManageHome.routeName: (_) => ManageHome(),
-  RentalsMain.routeName: (_) => RentalsMain(),
-  RentalsTrack.routeName: (_) => RentalsTrack(),
+  BookingAll.routeName: (_) => BookingAll(),
+  BookingTrack.routeName: (_) => BookingTrack(),
   CategoryList.routeName: (_) => CategoryList(),
   CategoryCreate.routeName: (_) => CategoryCreate(),
   CarCreate.routeName: (_) => CarCreate(),
