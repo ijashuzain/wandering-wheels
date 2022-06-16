@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:wandering_wheels/constants/status.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class CarBookingProvider extends ChangeNotifier {
   bool bookingUpdating = false;
   bool isMyBookingLoading = false;
   bool isAllBookingLoading = false;
+  bool isAddingBooking = false;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   fetchAllBookings(BuildContext context) async {
@@ -55,18 +57,59 @@ class CarBookingProvider extends ChangeNotifier {
     _setMyBookingLoading(false);
   }
 
+  addBooking({
+    required Booking booking,
+    required VoidCallback onSuccess,
+    required Function onError,
+  }) {
+    _setAddingBooking(true);
+    try {
+      var ref = db.collection('bookings').doc();
+      booking.bookingId = ref.id;
+      booking.status = BookingStatus.pending;
+      db.collection('bookings').doc(ref.id).set(booking.toJson());
+      onSuccess();
+      _setAddingBooking(false);
+    } catch (e) {
+      onError(e);
+      _setAddingBooking(false);
+      log(e.toString());
+    }
+  }
+
   updateBookingStatus({
     required String status,
     required String id,
   }) async {
     _setBookingUpdating(true);
     try {
-      await db.collection("bookings").doc(id).update({"status": status});
+      await db.collection("bookings").doc(id).update(
+        {
+          "status": status,
+          "returnedDate": status == BookingStatus.completed ? DateFormat('yyyy-MM-dd').format(DateTime.now()) : '',
+        },
+      );
       _setBookingUpdating(false);
     } catch (e) {
       _setBookingUpdating(false);
       log(e.toString());
     }
+  }
+
+  deleteBooking({required String id}) {
+    _setBookingUpdating(true);
+    try {
+      db.collection("bookings").doc(id).delete();
+      _setMyBookingLoading(false);
+    } catch (e) {
+      _setBookingUpdating(false);
+      log(e.toString());
+    }
+  }
+
+  void _setAddingBooking(bool value) {
+    isAddingBooking = value;
+    notifyListeners();
   }
 
   void _setMyBookingLoading(bool val) {

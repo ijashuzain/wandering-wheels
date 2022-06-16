@@ -17,7 +17,6 @@ class BookingAll extends StatefulWidget {
 }
 
 class _BookingAllState extends State<BookingAll> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -99,7 +98,8 @@ class _BookingAllState extends State<BookingAll> {
                                 returnDate:
                                     provider.allBookings[index].returnDate,
                                 status: provider.allBookings[index].status,
-                                returnedDate: provider.allBookings[index].returnedDate!, 
+                                returnedDate:
+                                    provider.allBookings[index].returnedDate!,
                                 onTrack: () {
                                   Navigator.pop(context);
                                   Navigator.pushNamed(
@@ -113,12 +113,27 @@ class _BookingAllState extends State<BookingAll> {
                                         id: provider
                                             .allBookings[index].bookingId,
                                       );
-                                  Navigator.pop(_scaffoldKey.currentState!.context);
+                                  Navigator.pop(
+                                      _scaffoldKey.currentState!.context);
                                   context
                                       .read<CarBookingProvider>()
-                                      .fetchAllBookings(_scaffoldKey.currentState!.context);
+                                      .fetchAllBookings(
+                                          _scaffoldKey.currentState!.context);
                                 },
-                                onDelete: () {},
+                                onDelete: () {
+                                  context
+                                      .read<CarBookingProvider>()
+                                      .deleteBooking(
+                                        id: provider
+                                            .allBookings[index].bookingId,
+                                      );
+                                  Navigator.pop(
+                                      _scaffoldKey.currentState!.context);
+                                  context
+                                      .read<CarBookingProvider>()
+                                      .fetchAllBookings(
+                                          _scaffoldKey.currentState!.context);
+                                },
                               ),
                             );
                           },

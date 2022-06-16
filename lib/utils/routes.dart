@@ -18,7 +18,7 @@ import 'package:wandering_wheels/views/booking/booking_track.dart';
 final Map<String, WidgetBuilder> routes = {
   '/': (_) => const StarterPage(),
   StarterPage.routeName: (_) => const StarterPage(),
-  Home.routeName: (_) => const Home(),
+  Home.routeName: (_) =>  Home(),
   LoginPage.routeName: (_) => LoginPage(),
   SignupPage.routeName: (_) => SignupPage(),
   CarDetails.routeName: (_) => CarDetails(),

@@ -11,13 +11,39 @@ class CarProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isUploadingImage = false;
   bool isUploadingCar = false;
+  List<Car> searchedCars = [];
   List<Car> cars = [];
   List<Car> categoryCars = [];
   Car? currentCar;
+  bool isSearching = false;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   void setCurrentCar(Car car) {
     currentCar = car;
+    notifyListeners();
+  }
+
+  void setIsSearching(bool isSearching) {
+    this.isSearching = isSearching;
+    notifyListeners();
+  }
+
+  //search from cars
+  void searchCars(String searchQuery) async {
+    setIsSearching(true);
+    searchedCars = [];
+    if (searchQuery.isEmpty) {
+      setIsSearching(false);
+      return;
+    } else {
+      setIsSearching(true);
+      for (var car in cars) {
+        if (car.name.toLowerCase().contains(searchQuery.toLowerCase())) {
+          searchedCars.add(car);
+          notifyListeners();
+        }
+      }
+    }
     notifyListeners();
   }
 
@@ -94,7 +120,8 @@ class CarProvider extends ChangeNotifier {
 
   fetchCarsByCategory(Category category) async {
     await fetchCars();
-    categoryCars = cars.where((element) => category.name == element.category).toList();
+    categoryCars =
+        cars.where((element) => category.name == element.category).toList();
     notifyListeners();
   }
 

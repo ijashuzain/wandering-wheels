@@ -100,20 +100,17 @@ class _StarterPageState extends State<StarterPage> {
     FirebaseAuth.instance.authStateChanges().listen(
       (user) async {
         if (user == null) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, LoginPage.routeName, (route) => true);
+          Navigator.pushReplacementNamed(context, LoginPage.routeName);
         } else {
           await context.read<UserProvider>().fetchUser(
                 userId: user.uid,
                 onSuccess: (user) async {
                   await context.read<CategoryProvider>().fetchCategories();
                   await context.read<CarProvider>().fetchCars();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, Navigation.routeName, (route) => true);
+                  Navigator.pushReplacementNamed(context, Navigation.routeName);
                 },
                 onError: (val) {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, LoginPage.routeName, (route) => true);
+                  Navigator.pushReplacementNamed(context, LoginPage.routeName);
                 },
               );
         }

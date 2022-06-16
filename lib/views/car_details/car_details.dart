@@ -110,8 +110,12 @@ class _CarDetailsState extends State<CarDetails> {
                 child: CButton(
                   title: "Book Now",
                   onTap: () {
-                    print("Something");
-                    Navigator.pushNamed(context, CarBooking.routeName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CarBooking(),
+                      ),
+                    );
                   },
                 ),
               ),

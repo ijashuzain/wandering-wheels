@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/providers/auth_provider.dart';
+import 'package:wandering_wheels/providers/car_provider.dart';
+import 'package:wandering_wheels/providers/category_provider.dart';
+import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/authentication/signup_page.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/navigation/navigation.dart';
@@ -67,8 +70,21 @@ class LoginPage extends StatelessWidget {
                   await provider.login(
                     email: usernameController.text,
                     password: passwordController.text,
-                    onSuccess: (val) {
-                      Navigator.pushNamedAndRemoveUntil(context, Navigation.routeName, ((route) => false));
+                    onSuccess: (val) async {
+                      await context.read<UserProvider>().fetchUser(
+                            userId: val,
+                            onSuccess: (val) async {
+                              await context
+                                  .read<CategoryProvider>()
+                                  .fetchCategories();
+                              await context.read<CarProvider>().fetchCars();
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  Navigation.routeName, ((route) => false));
+                            },
+                            onError: (val) {
+                              log(val);
+                            },
+                          );
                     },
                     onError: (val) {
                       log(val);

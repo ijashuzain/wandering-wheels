@@ -159,7 +159,8 @@ class BookingDetailSheet extends StatelessWidget {
     if (isManage) {
       //
       if (status == BookingStatus.pending) {
-        return Column(
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CButton(
               title: "Approve",

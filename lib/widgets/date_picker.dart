@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:sizer/sizer.dart';
+import 'package:jiffy/jiffy.dart';   
 
 class CDatePicker extends StatefulWidget {
   final String title;
   final String value;
-  final VoidCallback onSelected;
+  final Function(String) onSelected;
   const CDatePicker({
     Key? key,
     required this.title,
@@ -19,11 +21,31 @@ class CDatePicker extends StatefulWidget {
 }
 
 class _CDatePickerState extends State<CDatePicker> {
+
+  DateTime selectedDate = DateTime.now();
+  String selectedDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+        selectedDate = picked;
+        selectedDateString = formattedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        widget.onSelected();
+      onTap: () async {
+        await _selectDate(context);
+        widget.onSelected(selectedDateString);
       },
       child: SizedBox(
         child: Row(

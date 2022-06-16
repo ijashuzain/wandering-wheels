@@ -3,7 +3,15 @@ import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 
 class SearchWidget extends StatelessWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+  final Function(String) onSearch;
+  final bool isSearching;
+  final TextEditingController controller;
+  SearchWidget({
+    Key? key,
+    required this.onSearch,
+    this.isSearching = false,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +28,10 @@ class SearchWidget extends StatelessWidget {
           children: [
             Flexible(
               child: TextFormField(
+                controller: controller,
+                onChanged: (val) {
+                  onSearch(val);
+                },
                 cursorColor: kPrimaryColor,
                 style: TextStyle(
                   fontFamily: "Poppins",
@@ -36,10 +48,21 @@ class SearchWidget extends StatelessWidget {
                     fontSize: 10.sp,
                   ),
                   hintText: "Search",
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: kPrimaryColor,
-                  ),
+                  suffixIcon: isSearching
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.clear();
+                            onSearch('');
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: kPrimaryColor,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.search,
+                          color: kPrimaryColor,
+                        ),
                 ),
               ),
             ),

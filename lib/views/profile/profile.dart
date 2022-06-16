@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
+import 'package:wandering_wheels/views/authentication/login_page.dart';
 import 'package:wandering_wheels/widgets/button.dart';
 import 'package:wandering_wheels/widgets/text_field.dart';
 import 'package:provider/provider.dart';
@@ -137,12 +139,16 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     SettingsOption(
-                      title: "Change Password",
-                      onTap: () {},
-                    ),
-                    SettingsOption(
-                      title: "Delete Account",
-                      onTap: () {},
+                      title: "Signout",
+                      onTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                            (route) => false);
+                      },
                     ),
                   ],
                 ),

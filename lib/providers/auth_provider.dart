@@ -19,7 +19,7 @@ class AuthProvider extends ChangeNotifier {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       _setLoggingIn(false);
-      onSuccess("Login successful");
+      onSuccess(credential.user!.uid);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         _setLoggingIn(false);
@@ -50,7 +50,7 @@ class AuthProvider extends ChangeNotifier {
       await context.read<UserProvider>().createUser(
             user: user,
             onSuccess: (val) {
-              onSuccess("Logged In");
+              onSuccess(user.id!);
             },
             onError: (val) {
               onError(val);

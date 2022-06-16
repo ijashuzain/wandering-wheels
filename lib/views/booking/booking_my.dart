@@ -119,7 +119,8 @@ class _MyBookingState extends State<MyBooking> {
                                 returnDate:
                                     provider.myBookings[index].returnDate,
                                 status: provider.myBookings[index].status,
-                                returnedDate: provider.myBookings[index].returnedDate!, 
+                                returnedDate:
+                                    provider.myBookings[index].returnedDate!,
                                 onTrack: () {
                                   Navigator.pop(context);
                                   Navigator.pushNamed(
@@ -134,12 +135,27 @@ class _MyBookingState extends State<MyBooking> {
                                         id: provider
                                             .myBookings[index].bookingId,
                                       );
-                                  Navigator.pop(_scaffoldKey.currentState!.context);
+                                  Navigator.pop(
+                                      _scaffoldKey.currentState!.context);
                                   context
                                       .read<CarBookingProvider>()
-                                      .fetchMyBookings(_scaffoldKey.currentState!.context);
+                                      .fetchMyBookings(
+                                          _scaffoldKey.currentState!.context);
                                 },
-                                onDelete: () {},
+                                onDelete: () {
+                                  context
+                                      .read<CarBookingProvider>()
+                                      .deleteBooking(
+                                        id: provider
+                                            .myBookings[index].bookingId,
+                                      );
+                                  Navigator.pop(
+                                      _scaffoldKey.currentState!.context);
+                                  context
+                                      .read<CarBookingProvider>()
+                                      .fetchMyBookings(
+                                          _scaffoldKey.currentState!.context);
+                                },
                               ),
                             );
                           },

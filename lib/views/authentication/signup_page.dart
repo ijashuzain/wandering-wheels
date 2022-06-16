@@ -5,7 +5,11 @@ import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/auth_provider.dart';
+import 'package:wandering_wheels/providers/car_provider.dart';
+import 'package:wandering_wheels/providers/category_provider.dart';
+import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
+import 'package:wandering_wheels/views/navigation/navigation.dart';
 import 'package:wandering_wheels/widgets/auth_title.dart';
 import 'package:wandering_wheels/widgets/button.dart';
 import 'package:wandering_wheels/widgets/text_field.dart';
@@ -87,13 +91,24 @@ class SignupPage extends StatelessWidget {
                         phone: phoneController.text,
                         type: "Member",
                       ),
-                      onSuccess: (val) {
-                        log(val);
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          Home.routeName,
-                          ((route) => false),
-                        );
+                      onSuccess: (val) async {
+                        await context.read<UserProvider>().fetchUser(
+                              userId: val,
+                              onSuccess: (val) async {
+                                await context
+                                    .read<CategoryProvider>()
+                                    .fetchCategories();
+                                await context.read<CarProvider>().fetchCars();
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  Navigation.routeName,
+                                  ((route) => false),
+                                );
+                              },
+                              onError: (val) {
+                                log(val);
+                              },
+                            );
                       },
                       onError: (val) {
                         log(val);
