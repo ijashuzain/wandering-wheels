@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -25,6 +27,28 @@ class _BookingTrackState extends State<BookingTrack> {
   final loc.Location _location = loc.Location();
   late GoogleMapController _mapController;
   bool added = false;
+
+  String imgurl = "https://www.fluttercampus.com/img/car.png";
+  Uint8List? bytes;
+
+  Marker? marker;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      setState(() async {
+        bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl))
+            .buffer
+            .asUint8List();
+
+        marker = Marker(
+          markerId: const MarkerId('id'),
+          icon: BitmapDescriptor.fromBytes(bytes!),
+        );
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +79,12 @@ class _BookingTrackState extends State<BookingTrack> {
         ),
       ),
       body: Consumer<MapProvider>(builder: (context, provider, child) {
+        if (marker == null || bytes == null) {
+          return const Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+
         return SizedBox(
           height: 100.h,
           width: 100.w,
@@ -78,12 +108,7 @@ class _BookingTrackState extends State<BookingTrack> {
                   UserData user = UserData.fromJson(snapshot.data!.data()!);
                   return GoogleMap(
                     markers: {
-                      Marker(
-                        markerId: const MarkerId('id'),
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueRed,
-                        ),
-                      )
+                      marker!,
                     },
                     initialCameraPosition: CameraPosition(
                       target: LatLng(user.latitude!, user.longitude!),
@@ -110,12 +135,23 @@ class _BookingTrackState extends State<BookingTrack> {
 
   myMap(AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) async {
     log("myMap");
-    await _mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        target: LatLng(snapshot.data!.data()!['latitude']!,
-            snapshot.data!.data()!['longitude']!),
-        zoom: 15,
+    await _mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(snapshot.data!.data()!['latitude']!,
+              snapshot.data!.data()!['longitude']!),
+          zoom: 15,
+        ),
       ),
-    ));
+    );
+    setState(() {
+      marker = Marker(
+        markerId: const MarkerId('id'),
+        icon: BitmapDescriptor.fromBytes(bytes!),
+        position: LatLng(snapshot.data!.data()!['latitude']!,
+            snapshot.data!.data()!['longitude']!),
+      );
+    });
+    
   }
 }
