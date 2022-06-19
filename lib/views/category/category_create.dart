@@ -68,7 +68,9 @@ class _CategoryCreateState extends State<CategoryCreate> {
                     children: [
                       CImagePicker(
                         isUpdate: widget.isUpdate,
-                        networkImage: widget.category != null ? widget.category!.image : "",
+                        networkImage: widget.category != null
+                            ? widget.category!.image
+                            : "",
                         onImagePicked: (img) {
                           log(img.path);
                           setState(() {
@@ -96,29 +98,52 @@ class _CategoryCreateState extends State<CategoryCreate> {
                 padding: EdgeInsets.all(5.w),
                 child: Consumer<CategoryProvider>(
                     builder: (context, provider, child) {
-                  return CButton(
-                    title: "Submit",
-                    isLoading: provider.isUploadingCategory,
-                    isDisabled: provider.isUploadingCategory,
-                    onTap: () {
-                      provider.uploadCategory(
-                        image: image,
-                        isUpdate: image != null ? true : false,
-                        currentImage: widget.category!.image,
-                        categoryName: categoryNameController.text,
-                        categoryId: categoryIdController.text,
-                        onSuccess: (val) {
-                          log("Success");
-                          Navigator.pop(context);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CButton(
+                        title:  widget.isUpdate ? "Update" : "Create",
+                        isLoading: provider.isUploadingCategory,
+                        isDisabled: provider.isUploadingCategory,
+                        onTap: () {
+                          provider.uploadCategory(
+                            image: image,
+                            isUpdate: widget.isUpdate,
+                            currentImage: widget.isUpdate ? widget.category!.image : null,
+                            categoryName: categoryNameController.text,
+                            categoryId: categoryIdController.text,
+                            onSuccess: (val) {
+                              log("Success");
+                              Navigator.pop(context);
+                            },
+                            onError: (val) {
+                              log(val);
+                              categoryNameController.clear();
+                              categoryIdController.clear();
+                              image = null;
+                            },
+                          );
                         },
-                        onError: (val) {
-                          log(val);
-                          categoryNameController.clear();
-                          categoryIdController.clear();
-                          image = null;
-                        },
-                      );
-                    },
+                      ),
+                      if (widget.isUpdate)
+                        CButton(
+                          title: "Delete",
+                          isLoading: provider.isDeleteingCategory,
+                          isDisabled: provider.isDeleteingCategory,
+                          onTap: () {
+                            provider.deleteCategory(
+                              categoryId: widget.category!.id,
+                              onSuccess: (val) {
+                                log("Success");
+                                Navigator.pop(context);
+                              },
+                              onError: (val) {
+                                log(val);
+                              },
+                            );
+                          },
+                        )
+                    ],
                   );
                 }),
               ),

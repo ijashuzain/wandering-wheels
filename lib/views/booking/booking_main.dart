@@ -22,7 +22,7 @@ class _BookingAllState extends State<BookingAll> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      context.read<CarBookingProvider>().fetchAllBookings(context);
+      context.read<BookingProvider>().fetchAllBookings(context);
     });
     super.initState();
   }
@@ -43,7 +43,7 @@ class _BookingAllState extends State<BookingAll> {
       body: SizedBox(
         height: 100.h,
         width: 100.w,
-        child: Consumer<CarBookingProvider>(
+        child: Consumer<BookingProvider>(
           builder: (context, provider, child) {
             if (provider.isAllBookingLoading) {
               return const Center(
@@ -102,11 +102,16 @@ class _BookingAllState extends State<BookingAll> {
                                     provider.allBookings[index].returnedDate!,
                                 onTrack: () {
                                   Navigator.pop(context);
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => BookingTrack(bookingData: provider.allBookings[index])));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => BookingTrack(
+                                              bookingData: provider
+                                                  .allBookings[index])));
                                 },
                                 onStatusUpdate: (val) {
                                   context
-                                      .read<CarBookingProvider>()
+                                      .read<BookingProvider>()
                                       .updateBookingStatus(
                                         status: val,
                                         id: provider
@@ -115,21 +120,19 @@ class _BookingAllState extends State<BookingAll> {
                                   Navigator.pop(
                                       _scaffoldKey.currentState!.context);
                                   context
-                                      .read<CarBookingProvider>()
+                                      .read<BookingProvider>()
                                       .fetchAllBookings(
                                           _scaffoldKey.currentState!.context);
                                 },
-                                onDelete: () {
-                                  context
-                                      .read<CarBookingProvider>()
-                                      .deleteBooking(
+                                onDelete: () async {
+                                  await context.read<BookingProvider>().deleteBooking(
                                         id: provider
                                             .allBookings[index].bookingId,
                                       );
                                   Navigator.pop(
                                       _scaffoldKey.currentState!.context);
                                   context
-                                      .read<CarBookingProvider>()
+                                      .read<BookingProvider>()
                                       .fetchAllBookings(
                                           _scaffoldKey.currentState!.context);
                                 },

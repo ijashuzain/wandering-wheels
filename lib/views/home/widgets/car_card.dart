@@ -8,12 +8,13 @@ class CarCard extends StatelessWidget {
   final String carImage;
   final String carRate;
   final VoidCallback onTap;
+  final VoidCallback? onDelete;
   const CarCard(
       {Key? key,
       required this.carName,
       required this.carImage,
       required this.carRate,
-      required this.onTap})
+      required this.onTap, this.onDelete})
       : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class CarCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kGreyColor,
                   borderRadius: BorderRadius.circular(6),
-                  image:  DecorationImage(
+                  image: DecorationImage(
                     image: NetworkImage(carImage),
                     fit: BoxFit.cover,
                   ),
@@ -89,7 +90,7 @@ class CarCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

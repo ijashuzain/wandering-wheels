@@ -11,6 +11,7 @@ class CategoryProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isUploadingImage = false;
   bool isUploadingCategory = false;
+  bool isDeleteingCategory = false;
   Category? currentCategory;
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -43,6 +44,7 @@ class CategoryProvider extends ChangeNotifier {
   }) async {
     _setUploadingCategory(true);
     String url = '';
+    log(isUpdate.toString());
     if (isUpdate) {
       url = currentImage!;
     } else {
@@ -69,6 +71,23 @@ class CategoryProvider extends ChangeNotifier {
     } else {
       _setUploadingCategory(false);
       onError("Error uploading image");
+    }
+  }
+
+  deleteCategory({
+    required String categoryId,
+    required Function(String) onSuccess,
+    required Function(String) onError,
+  }) async {
+    _setDeletingCategory(true);
+    try {
+      await db.collection("categories").doc(categoryId).delete();
+      await fetchCategories();
+      _setDeletingCategory(false);
+      onSuccess("Category has deleted successfully");
+    } catch (e) {
+      _setDeletingCategory(false);
+      onError(e.toString());
     }
   }
 
@@ -99,6 +118,11 @@ class CategoryProvider extends ChangeNotifier {
 
   void _setUploadingImage(bool value) {
     isUploadingImage = value;
+    notifyListeners();
+  }
+
+  void _setDeletingCategory(bool val) {
+    isDeleteingCategory = val;
     notifyListeners();
   }
 

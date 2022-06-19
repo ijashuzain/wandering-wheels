@@ -45,7 +45,7 @@ class _CategoryListState extends State<CategoryList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, CategoryCreate.routeName);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryCreate(isUpdate: false,)));
         },
         child: const Icon(Icons.add),
         backgroundColor: kPrimaryColor,

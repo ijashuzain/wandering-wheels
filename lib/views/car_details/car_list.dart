@@ -46,7 +46,7 @@ class CarList extends StatelessWidget {
             );
           }
           if (cars.isEmpty) {
-            return  Center(
+            return Center(
               child: Text(
                 "No cars found",
                 style: TextStyle(
@@ -89,6 +89,7 @@ class CarList extends StatelessWidget {
                                 ),
                               );
                             } else {
+                              provider.setCurrentCar(cars[index]);
                               Navigator.pushNamed(
                                 context,
                                 CarDetails.routeName,

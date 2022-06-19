@@ -63,7 +63,7 @@ class _CarCreateState extends State<CarCreate> {
         elevation: 0,
         iconTheme: const IconThemeData(color: kPrimaryColor),
         title: const Text(
-          "New Car",
+          "Car",
           style: TextStyle(color: kPrimaryColor),
         ),
       ),
@@ -123,39 +123,61 @@ class _CarCreateState extends State<CarCreate> {
                 padding: EdgeInsets.all(5.w),
                 child:
                     Consumer<CarProvider>(builder: (context, provider, child) {
-                  return CButton(
-                    isLoading: provider.isUploadingCar,
-                    isDisabled: provider.isUploadingCar,
-                    title: "Submit",
-                    onTap: () {
-                      provider.uploadCar(
-                        isUpdate: widget.isUpdate,
-                        currentImage:
-                            widget.car != null ? widget.car!.image : null,
-                        image: image,
-                        car: Car(
-                          name: displayNameController.text,
-                          rate: int.parse(rateController.text),
-                          category: categoryController.text,
-                          manufacturer: manufacturerController.text,
-                          model: modelController.text,
-                          year: int.parse(yearController.text),
-                          mileage: int.parse(mileageController.text),
-                          seats: int.parse(seatController.text),
-                          quantity: int.parse(quantityController.text),
-                          fuel: fuelController.text,
-                          id: widget.car == null ? "" : widget.car!.id,
-                          image: widget.car == null ? "" : widget.car!.image,
-                        ),
-                        onSuccess: (va) {
-                          Navigator.pop(context);
-                          log("Car Created");
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CButton(
+                        isLoading: provider.isUploadingCar,
+                        isDisabled: provider.isUploadingCar,
+                        title: widget.isUpdate ? "Update" : "Create",
+                        onTap: () {
+                          provider.uploadCar(
+                            isUpdate: widget.isUpdate,
+                            currentImage:
+                                widget.car != null ? widget.car!.image : null,
+                            image: image,
+                            car: Car(
+                              name: displayNameController.text,
+                              rate: int.parse(rateController.text),
+                              category: categoryController.text,
+                              manufacturer: manufacturerController.text,
+                              model: modelController.text,
+                              year: int.parse(yearController.text),
+                              mileage: int.parse(mileageController.text),
+                              seats: int.parse(seatController.text),
+                              quantity: int.parse(quantityController.text),
+                              fuel: fuelController.text,
+                              id: widget.car == null ? "" : widget.car!.id,
+                              image: widget.car == null ? "" : widget.car!.image,
+                            ),
+                            onSuccess: (va) {
+                              Navigator.pop(context);
+                              log("Car Created");
+                            },
+                            onError: (val) {
+                              log(val.toString());
+                            },
+                          );
                         },
-                        onError: (val) {
-                          log(val.toString());
+                      ),
+                      if(widget.isUpdate) CButton(
+                        isLoading: provider.isDeletingCar,  
+                        isDisabled: provider.isDeletingCar,
+                        title: "Delete",
+                        onTap: () {
+                          provider.deleteCar(
+                            car: widget.car!,
+                            onSuccess: (va) {
+                              Navigator.pop(context);
+                              log("Car Deleted");
+                            },
+                            onError: (val) {
+                              log(val.toString());
+                            },
+                          );
                         },
-                      );
-                    },
+                      ),
+                    ],
                   );
                 }),
               ),

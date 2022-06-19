@@ -11,7 +11,7 @@ import 'package:wandering_wheels/models/booking_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 
-class CarBookingProvider extends ChangeNotifier {
+class BookingProvider extends ChangeNotifier {
   List<Booking> myBookings = [];
   List<Booking> allBookings = [];
   bool bookingUpdating = false;
@@ -61,13 +61,13 @@ class CarBookingProvider extends ChangeNotifier {
     required Booking booking,
     required VoidCallback onSuccess,
     required Function onError,
-  }) {
+  }) async {
     _setAddingBooking(true);
     try {
       var ref = db.collection('bookings').doc();
       booking.bookingId = ref.id;
       booking.status = BookingStatus.pending;
-      db.collection('bookings').doc(ref.id).set(booking.toJson());
+      await db.collection('bookings').doc(ref.id).set(booking.toJson());
       onSuccess();
       _setAddingBooking(false);
     } catch (e) {
@@ -86,7 +86,9 @@ class CarBookingProvider extends ChangeNotifier {
       await db.collection("bookings").doc(id).update(
         {
           "status": status,
-          "returnedDate": status == BookingStatus.completed ? DateFormat('yyyy-MM-dd').format(DateTime.now()) : '',
+          "returnedDate": status == BookingStatus.completed
+              ? DateFormat('yyyy-MM-dd').format(DateTime.now())
+              : '',
         },
       );
       _setBookingUpdating(false);
@@ -96,11 +98,11 @@ class CarBookingProvider extends ChangeNotifier {
     }
   }
 
-  deleteBooking({required String id}) {
+  deleteBooking({required String id}) async {
     _setBookingUpdating(true);
     try {
-      db.collection("bookings").doc(id).delete();
-      _setMyBookingLoading(false);
+      await db.collection("bookings").doc(id).delete();
+      _setBookingUpdating(false);
     } catch (e) {
       _setBookingUpdating(false);
       log(e.toString());

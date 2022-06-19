@@ -145,9 +145,7 @@ class BookingDetailSheet extends StatelessWidget {
             ),
             SizedBox(height: 2.h),
             Center(
-              child: isLoading
-                  ? const CupertinoActivityIndicator()
-                  : interactionButton(),
+              child: interactionButton(),
             ),
           ],
         ),
@@ -163,6 +161,8 @@ class BookingDetailSheet extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CButton(
+              isDisabled: isLoading,
+              isLoading: isLoading,
               title: "Approve",
               onTap: () {
                 onStatusUpdate(BookingStatus.onroad);
@@ -172,6 +172,8 @@ class BookingDetailSheet extends StatelessWidget {
               width: 1.h,
             ),
             CButton(
+              isDisabled: isLoading,
+              isLoading: isLoading,
               title: "Reject",
               onTap: () {
                 onStatusUpdate(BookingStatus.rejected);
@@ -182,6 +184,8 @@ class BookingDetailSheet extends StatelessWidget {
       } else if (status == BookingStatus.rejected &&
           status == BookingStatus.completed) {
         return CButton(
+          isDisabled: isLoading,
+          isLoading: isLoading,
           title: "Delete",
           onTap: () {
             onDelete();
@@ -200,6 +204,8 @@ class BookingDetailSheet extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CButton(
+              isDisabled: isLoading,
+              isLoading: isLoading,
               title: "Return Accept",
               onTap: () {
                 onStatusUpdate(BookingStatus.completed);
@@ -209,6 +215,8 @@ class BookingDetailSheet extends StatelessWidget {
               width: 1.h,
             ),
             CButton(
+              isDisabled: isLoading,
+              isLoading: isLoading,
               title: "Return Reject",
               onTap: () {
                 onStatusUpdate(BookingStatus.onroad);
@@ -219,6 +227,8 @@ class BookingDetailSheet extends StatelessWidget {
       } else if (status == BookingStatus.rejected ||
           status == BookingStatus.completed) {
         return CButton(
+          isDisabled: isLoading,
+          isLoading: isLoading,
           title: "Delete",
           onTap: () {
             onDelete();
@@ -230,6 +240,8 @@ class BookingDetailSheet extends StatelessWidget {
     } else {
       if (status == BookingStatus.pending) {
         return CButton(
+          isDisabled: isLoading,
+          isLoading: isLoading,
           title: "Cancel",
           onTap: () {
             onDelete();
@@ -238,6 +250,8 @@ class BookingDetailSheet extends StatelessWidget {
       } else if (status == BookingStatus.onroad ||
           status == BookingStatus.overdue) {
         return CButton(
+          isDisabled: isLoading,
+          isLoading: isLoading,
           title: "Return",
           onTap: () {
             onStatusUpdate(BookingStatus.returnRequest);
@@ -246,12 +260,16 @@ class BookingDetailSheet extends StatelessWidget {
       } else if (status == BookingStatus.rejected) {
         return CButton(
           title: "Delete",
+          isDisabled: isLoading,
+          isLoading: isLoading,
           onTap: () {
             onDelete();
           },
         );
       } else if (status == BookingStatus.returnRequest) {
         return CButton(
+          isDisabled: isLoading,
+          isLoading: isLoading,
           title: "Cancel Return",
           onTap: () {
             onStatusUpdate(BookingStatus.onroad);

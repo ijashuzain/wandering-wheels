@@ -92,22 +92,22 @@ class CategoryCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Text(
-                          "$avilableCars Cars Available",
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w500,
-                            color: kSecondaryColor,
-                            fontFamily: "Poppins",
-                            shadows: const [
-                              Shadow(
-                                color: Colors.white,
-                                blurRadius: 3,
-                                offset: Offset(1, 1),
-                              )
-                            ],
-                          ),
-                        ),
+                        // Text(
+                        //   "$avilableCars Cars Available",
+                        //   style: TextStyle(
+                        //     fontSize: 10.sp,
+                        //     fontWeight: FontWeight.w500,
+                        //     color: kSecondaryColor,
+                        //     fontFamily: "Poppins",
+                        //     shadows: const [
+                        //       Shadow(
+                        //         color: Colors.white,
+                        //         blurRadius: 3,
+                        //         offset: Offset(1, 1),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

@@ -11,6 +11,7 @@ class CarProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isUploadingImage = false;
   bool isUploadingCar = false;
+  bool isDeletingCar = false;
   List<Car> searchedCars = [];
   List<Car> cars = [];
   List<Car> categoryCars = [];
@@ -83,6 +84,7 @@ class CarProvider extends ChangeNotifier {
     }
     if (url != '') {
       car.image = url;
+      car.id = id;
       try {
         await db.collection("cars").doc(id).set(car.toMap());
         await fetchCars();
@@ -95,6 +97,24 @@ class CarProvider extends ChangeNotifier {
     } else {
       _setUploadingCar(false);
       onError("Error uploading car");
+    }
+  }
+
+  deleteCar({
+    File? image,
+    required Car car,
+    required Function(String) onSuccess,
+    required Function(String) onError,
+  }) async {
+    _setDeletingCar(true);
+    try {
+      await db.collection("cars").doc(car.id).delete();
+      await fetchCars();
+      _setDeletingCar(false);
+      onSuccess("Car has deleted successfully");
+    } catch (e) {
+      _setDeletingCar(false);
+      onError(e.toString());
     }
   }
 
@@ -127,6 +147,11 @@ class CarProvider extends ChangeNotifier {
 
   void _setUploadingCar(bool val) {
     isUploadingCar = val;
+    notifyListeners();
+  }
+
+  void _setDeletingCar(bool val) {
+    isDeletingCar = val;
     notifyListeners();
   }
 

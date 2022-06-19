@@ -106,9 +106,10 @@ class _CarBookingState extends State<CarBooking> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.all(5.w),
-                child: Consumer<CarBookingProvider>(
+                child: Consumer<BookingProvider>(
                   builder: (context, provider, child) {
                     return CButton(
+                      isDisabled: provider.isAddingBooking,
                       isLoading: provider.isAddingBooking,
                       title: "Book Now",
                       onTap: () {
@@ -158,7 +159,7 @@ class _CarBookingState extends State<CarBooking> {
                           );
                           return;
                         } else {
-                          context.read<CarBookingProvider>().addBooking(
+                          context.read<BookingProvider>().addBooking(
                                 booking: booking,
                                 onSuccess: () {
                                   Navigator.pop(context);
