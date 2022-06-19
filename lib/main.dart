@@ -39,12 +39,12 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: 'Wheels',
             debugShowCheckedModeBanner: false,
+            routes: routes,
+            initialRoute: StarterPage.routeName,
             theme: ThemeData(
               primaryColor: kPrimaryColor,
               backgroundColor: kBackgroundColor,
             ),
-            routes: routes,
-            initialRoute: StarterPage.routeName,
           ),
         );
       },

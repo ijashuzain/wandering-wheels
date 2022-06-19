@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:wandering_wheels/providers/booking_provider.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
+import 'package:wandering_wheels/providers/map_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_details.dart';
 import 'package:wandering_wheels/views/home/home_cars.dart';
@@ -11,11 +13,24 @@ import 'package:wandering_wheels/views/home/widgets/search_widget.dart';
 import 'package:wandering_wheels/widgets/heading.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   static const String routeName = "/home";
   Home({Key? key}) : super(key: key);
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      context.read<MapProvider>().getLocation(context: context);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +89,8 @@ class Home extends StatelessWidget {
                                 carRate: carProvider.searchedCars[index].rate
                                     .toString(),
                                 onTap: () {
-                                  carProvider.setCurrentCar(carProvider.searchedCars[index]);
+                                  carProvider.setCurrentCar(
+                                      carProvider.searchedCars[index]);
                                   Navigator.pushNamed(
                                     context,
                                     CarDetails.routeName,

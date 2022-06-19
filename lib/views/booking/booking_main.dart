@@ -102,8 +102,7 @@ class _BookingAllState extends State<BookingAll> {
                                     provider.allBookings[index].returnedDate!,
                                 onTrack: () {
                                   Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, BookingTrack.routeName);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => BookingTrack(bookingData: provider.allBookings[index])));
                                 },
                                 onStatusUpdate: (val) {
                                   context

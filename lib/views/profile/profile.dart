@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/models/user_model.dart';
+import 'package:wandering_wheels/providers/map_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/authentication/login_page.dart';
 import 'package:wandering_wheels/widgets/button.dart';
@@ -150,6 +152,37 @@ class _ProfileState extends State<Profile> {
                             (route) => false);
                       },
                     ),
+                    Consumer<UserProvider>(builder: (context, provider, child) {
+                      return Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 4.w),
+                            child: Text(
+                              "Track Me",
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor,
+                                fontFamily: "Poppins",
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          provider.isUpdatingTracking
+                              ? SizedBox(
+                                height: 50,
+                                width: 50,
+                                  child: const CupertinoActivityIndicator())
+                              : Switch(
+                                  value: provider.isTrackingEnabled,
+                                  onChanged: (val) async {
+                                    await provider.updateTrack(val);
+                                    context.read<UserProvider>().checkTrackingStatus(context);
+                                  },
+                                ),
+                        ],
+                      );
+                    })
                   ],
                 ),
               ),

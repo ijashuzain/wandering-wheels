@@ -15,6 +15,8 @@ class Booking {
   String insuranceType;
   String bookingId;
   String? returnedDate;
+  double? latitude;
+  double? longitude;
 
   Booking({
     required this.driverName,
@@ -30,6 +32,8 @@ class Booking {
     required this.bookingId,
     required this.insuranceType,
     required this.returnedDate,
+    this.latitude,
+    this.longitude,
   });
 
   Booking.fromJson(Map<String, dynamic> json)
@@ -45,6 +49,8 @@ class Booking {
         bookingId = json['bookingId'],
         returnedDate = json['returnedDate'] ?? '',
         insuranceType = json['insuranceType'],
+        latitude = json['latitude'] ?? 0,
+        longitude = json['longitude'] ?? 0,
         car = json['car'];
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +67,7 @@ class Booking {
         "returnedDate": returnedDate,
         "car": car,
         "insuranceType": insuranceType,
-      };  
+        "latitude": latitude,
+        "longitude": longitude,
+      };
 }

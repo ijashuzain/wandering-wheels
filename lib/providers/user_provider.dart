@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wandering_wheels/models/user_model.dart';
+import 'package:wandering_wheels/providers/map_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
   bool creatingUser = false;
   FirebaseFirestore db = FirebaseFirestore.instance;
   UserData? currentUser;
+  bool isTrackingEnabled = false;
+  bool isUpdatingTracking = false;
 
   createUser({
     required UserData user,
@@ -32,6 +36,7 @@ class UserProvider extends ChangeNotifier {
       var ref = await db.collection("users").doc(userId).get();
       if (ref.data() != null) {
         currentUser = UserData.fromJson(ref.data()!);
+        setTrackingStatus(currentUser!.trackMe);
         onSuccess(currentUser!);
       } else {
         currentUser = null;
@@ -56,6 +61,47 @@ class UserProvider extends ChangeNotifier {
       _setCreatingUser(false);
       onError(e.toString());
     }
+  }
+
+  updateTrack(bool val) async {
+    _setUpdatingTracking(true);
+    try {
+      await db
+          .collection("users")
+          .doc(currentUser!.id)
+          .update({"trackMe": val});
+      await fetchUser(
+          userId: currentUser!.id!, onSuccess: (val) {}, onError: (err) {});
+      _setUpdatingTracking(false);
+    } catch (e) {
+      await fetchUser(
+          userId: currentUser!.id!, onSuccess: (val) {}, onError: (err) {});
+      _setUpdatingTracking(false);
+    }
+  }
+
+  checkTrackingStatus(BuildContext context) async {
+    await fetchUser(
+      userId: currentUser!.id!,
+      onSuccess: (val) {
+        if (currentUser!.trackMe) {
+          context.read<MapProvider>().listenLocation(context);
+        } else {
+          context.read<MapProvider>().stopListeningLocation();
+        }
+      },
+      onError: (err) {},
+    );
+  }
+
+  void setTrackingStatus(bool val) {
+    isTrackingEnabled = val;
+    notifyListeners();
+  }
+
+  void _setUpdatingTracking(bool val) {
+    isUpdatingTracking = val;
+    notifyListeners();
   }
 
   void _setCreatingUser(bool val) {

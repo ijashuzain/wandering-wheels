@@ -48,6 +48,10 @@ dependencies:
   intl:
   jiffy:
 
+  google_maps_flutter:
+  location:
+  permission_handler:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

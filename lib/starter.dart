@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
+import 'package:wandering_wheels/providers/map_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/authentication/login_page.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
@@ -23,6 +24,7 @@ class _StarterPageState extends State<StarterPage> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      context.read<MapProvider>().requestPermission();
       await _checkLogin(context);
     });
     super.initState();

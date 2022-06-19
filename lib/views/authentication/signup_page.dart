@@ -90,6 +90,7 @@ class SignupPage extends StatelessWidget {
                         email: emailController.text,
                         phone: phoneController.text,
                         type: "Member",
+                        trackMe: false,
                       ),
                       onSuccess: (val) async {
                         await context.read<UserProvider>().fetchUser(
