@@ -36,16 +36,15 @@ class _BookingTrackState extends State<BookingTrack> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      setState(() async {
-        bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl))
-            .buffer
-            .asUint8List();
+      bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl))
+          .buffer
+          .asUint8List();
 
-        marker = Marker(
-          markerId: const MarkerId('id'),
-          icon: BitmapDescriptor.fromBytes(bytes!),
-        );
-      });
+      marker = Marker(
+        markerId: const MarkerId('id'),
+        icon: BitmapDescriptor.fromBytes(bytes!),
+      );
+      setState(() {});
     });
     super.initState();
   }
@@ -152,6 +151,5 @@ class _BookingTrackState extends State<BookingTrack> {
             snapshot.data!.data()!['longitude']!),
       );
     });
-    
   }
 }
