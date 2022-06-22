@@ -163,11 +163,34 @@ class _CarBookingState extends State<CarBooking> {
                                 booking: booking,
                                 onSuccess: () {
                                   Navigator.pop(context);
-                                  //Success Snackbar
-                                  Scaffold.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Booking added"),
-                                      duration: Duration(seconds: 2),
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title:  Text(
+                                        "Completed",
+                                        style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          color: kPrimaryColor,
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                      content:  Text(
+                                          "Car booking has successfully completed. Please wait for confirmation.",
+                                          style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          color: kSecondaryColor,
+                                          fontSize: 10.sp,
+                                        ),
+                                          ),
+                                      actions: [
+                                        FlatButton(
+                                          child: const Text("OK"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   );
                                 },

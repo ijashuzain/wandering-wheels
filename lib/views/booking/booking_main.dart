@@ -39,6 +39,14 @@ class _BookingAllState extends State<BookingAll> {
           "Bookings",
           style: TextStyle(color: kPrimaryColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<BookingProvider>().fetchAllBookings(context);
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: SizedBox(
         height: 100.h,
@@ -100,6 +108,7 @@ class _BookingAllState extends State<BookingAll> {
                                 status: provider.allBookings[index].status,
                                 returnedDate:
                                     provider.allBookings[index].returnedDate!,
+                                carId: provider.allBookings[index].car!.id!,
                                 onTrack: () {
                                   Navigator.pop(context);
                                   Navigator.push(

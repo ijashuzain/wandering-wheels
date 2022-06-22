@@ -50,23 +50,41 @@ class _MyBookingState extends State<MyBooking> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "My Bookings",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: kPrimaryColor,
-                        fontFamily: "Poppins",
-                      ),
-                    ),
-                    Text(
-                      "Current Bookings",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: kSecondaryColor,
-                        fontFamily: "Poppins",
-                      ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "My Bookings",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor,
+                                fontFamily: "Poppins",
+                              ),
+                            ),
+                            Text(
+                              "Current Bookings",
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w500,
+                                color: kSecondaryColor,
+                                fontFamily: "Poppins",
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            context
+                                .read<BookingProvider>()
+                                .fetchMyBookings(context);
+                          },
+                          icon: const Icon(Icons.refresh),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -121,6 +139,7 @@ class _MyBookingState extends State<MyBooking> {
                                 status: provider.myBookings[index].status,
                                 returnedDate:
                                     provider.myBookings[index].returnedDate!,
+                                carId: provider.myBookings[index].car!.id!,
                                 onTrack: () {
                                   Navigator.pop(context);
                                   Navigator.pushNamed(
@@ -143,7 +162,9 @@ class _MyBookingState extends State<MyBooking> {
                                           _scaffoldKey.currentState!.context);
                                 },
                                 onDelete: () async {
-                                  await context.read<BookingProvider>().deleteBooking(
+                                  await context
+                                      .read<BookingProvider>()
+                                      .deleteBooking(
                                         id: provider
                                             .myBookings[index].bookingId,
                                       );

@@ -141,7 +141,7 @@ class CarProvider extends ChangeNotifier {
   fetchCarsByCategory(Category category) async {
     await fetchCars();
     categoryCars =
-        cars.where((element) => category.name == element.category).toList();
+        cars.where((element) => category.id == element.categoryId).toList();
     notifyListeners();
   }
 

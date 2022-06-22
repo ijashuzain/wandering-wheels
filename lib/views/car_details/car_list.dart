@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/models/category_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_create.dart';
 import 'package:wandering_wheels/views/car_details/car_details.dart';
@@ -27,6 +28,14 @@ class CarList extends StatelessWidget {
           "Cars",
           style: TextStyle(color: kPrimaryColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<CarProvider>().fetchCars();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       floatingActionButton: isEdit
           ? FloatingActionButton(

@@ -20,6 +20,20 @@ class BookingProvider extends ChangeNotifier {
   bool isAddingBooking = false;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
+  Car dummyCar = Car(
+    name: "No Car Found",
+    rate: 0,
+    categoryId: "NONE",
+    manufacturer: "NONE",
+    model: "NONE",
+    year: 1000,
+    mileage: 0,
+    seats: 0,
+    quantity: 0,
+    fuel: "NONE",
+    id: "1",
+  );
+
   fetchAllBookings(BuildContext context) async {
     _setAllBookingLoading(true);
     var ref = await db.collection('bookings').get();
@@ -28,7 +42,11 @@ class BookingProvider extends ChangeNotifier {
     allBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
-      var car = cars.firstWhere((car) => car.id == booking.carId);
+      log(cars.length.toString());
+      var car = cars.firstWhere(
+        (car) => car.id == booking.carId,
+        orElse: () => dummyCar,
+      );
       booking.car = car;
       allBookings.add(booking);
       notifyListeners();
@@ -46,10 +64,14 @@ class BookingProvider extends ChangeNotifier {
         .get();
     await context.read<CarProvider>().fetchCars();
     List<Car> cars = context.read<CarProvider>().cars;
+    log(cars.length.toString());
     myBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
-      var car = cars.firstWhere((car) => car.id == booking.carId);
+      var car = cars.firstWhere(
+        (car) => car.id == booking.carId,
+        orElse: () => dummyCar,
+      );
       booking.car = car;
       myBookings.add(booking);
       notifyListeners();

@@ -11,6 +11,7 @@ class BookingDetailSheet extends StatelessWidget {
   bool isManage;
   final String driverName;
   final String carName;
+  final String carId;
   final String driverPhone;
   final String driverEmail;
   final VoidCallback onTrack;
@@ -39,6 +40,7 @@ class BookingDetailSheet extends StatelessWidget {
     this.isLoading = false,
     required this.onDelete,
     required this.returnedDate,
+    required this.carId,
   }) : super(key: key);
 
   @override
@@ -145,7 +147,16 @@ class BookingDetailSheet extends StatelessWidget {
             ),
             SizedBox(height: 2.h),
             Center(
-              child: interactionButton(),
+              child: carId == "1"
+                  ? CButton(
+                      title: "Delete",
+                      isDisabled: isLoading,
+                      isLoading: isLoading,
+                      onTap: () {
+                        onDelete();
+                      },
+                    )
+                  : interactionButton(),
             ),
           ],
         ),

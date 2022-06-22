@@ -48,6 +48,7 @@ class CategoryProvider extends ChangeNotifier {
     if (isUpdate) {
       url = currentImage!;
     } else {
+      categoryId = db.collection("categories").doc().id;
       url = await uploadCategoryImage(
         categoryId: categoryId,
         image: image,
@@ -109,6 +110,14 @@ class CategoryProvider extends ChangeNotifier {
       _setUploadingImage(false);
       return url;
     }
+  }
+
+  String getCategoryName(String categoryId) {
+    Category cat = categories.firstWhere(
+      (element) => element.id == categoryId,
+      orElse: () => Category(id: "1", name: "NONE", image: "NONE"),
+    );
+    return cat.name;
   }
 
   void _setUploadingCategory(bool val) {

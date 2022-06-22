@@ -2,7 +2,7 @@ class Car {
   String name;
   String? image;
   int rate;
-  String category;
+  String categoryId;
   String manufacturer;
   String model;
   int year;
@@ -16,7 +16,7 @@ class Car {
     required this.name,
     this.image,
     required this.rate,
-    required this.category,
+    required this.categoryId,
     required this.manufacturer,
     required this.model,
     required this.year,
@@ -32,7 +32,7 @@ class Car {
   )   : name = json['name'],
         image = json['image'],
         rate = json['rate'],
-        category = json['category'],
+        categoryId = json['category'],
         manufacturer = json['manufacturer'],
         model = json['model'],
         year = json['year'],
@@ -47,7 +47,7 @@ class Car {
       'name': name,
       'image': image,
       'rate': rate,
-      'category': category,
+      'category': categoryId,
       'manufacturer': manufacturer,
       'model': model,
       'year': year,

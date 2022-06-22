@@ -153,7 +153,7 @@ class _ProfileState extends State<Profile> {
                       },
                     ),
                     Consumer<UserProvider>(builder: (context, provider, child) {
-                      return Row(
+                      return provider.currentUser!.type == "Admin" ? const SizedBox() : Row(
                         children: [
                           Padding(
                             padding: EdgeInsets.only(left: 4.w),
@@ -167,12 +167,12 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           provider.isUpdatingTracking
-                              ? SizedBox(
+                              ? const SizedBox(
                                 height: 50,
                                 width: 50,
-                                  child: const CupertinoActivityIndicator())
+                                  child: CupertinoActivityIndicator())
                               : Switch(
                                   value: provider.isTrackingEnabled,
                                   onChanged: (val) async {

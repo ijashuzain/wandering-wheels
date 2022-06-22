@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
+import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_booking.dart';
 import 'package:wandering_wheels/views/car_details/widgets/car_specifications.dart';
 import 'package:wandering_wheels/views/car_details/widgets/car_titile.dart';
@@ -79,7 +80,7 @@ class _CarDetailsState extends State<CarDetails> {
                             children: [
                               CarTitle(
                                 title: provider.currentCar!.name,
-                                category: provider.currentCar!.category,
+                                category: context.read<CategoryProvider>().getCategoryName(provider.currentCar!.categoryId),
                               ),
                               SizedBox(height: 3.h),
                               CarSpecifications(

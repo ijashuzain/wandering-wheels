@@ -42,10 +42,23 @@ class _CategoryListState extends State<CategoryList> {
           "Categories",
           style: TextStyle(color: kPrimaryColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              fetchCategories(context);
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryCreate(isUpdate: false,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CategoryCreate(
+                        isUpdate: false,
+                      )));
         },
         child: const Icon(Icons.add),
         backgroundColor: kPrimaryColor,
