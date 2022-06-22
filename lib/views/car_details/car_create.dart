@@ -202,6 +202,36 @@ class _CarCreateState extends State<CarCreate> {
                                 ],
                               ),
                             );
+                          } else if (!widget.isUpdate && image == null) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  "Oops",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kPrimaryColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                content: Text(
+                                  "Please select image",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kSecondaryColor,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                                actions: [
+                                  FlatButton(
+                                    child: const Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
                           } else {
                             provider.uploadCar(
                               isUpdate: widget.isUpdate,
