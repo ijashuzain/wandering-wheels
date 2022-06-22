@@ -46,7 +46,14 @@ class CategoryProvider extends ChangeNotifier {
     String url = '';
     log(isUpdate.toString());
     if (isUpdate) {
-      url = currentImage!;
+      if (image == null) {
+        url = currentImage!;
+      } else {
+        url = await uploadCategoryImage(
+          categoryId: categoryId,
+          image: image,
+        );
+      }
     } else {
       categoryId = db.collection("categories").doc().id;
       url = await uploadCategoryImage(

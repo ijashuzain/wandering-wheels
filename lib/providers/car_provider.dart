@@ -72,8 +72,16 @@ class CarProvider extends ChangeNotifier {
     String url = '';
     String id = '';
     if (isUpdate) {
-      url = currentImage!;
       id = car.id!;
+      if (image != null) {
+        url = await uploadCarImage(
+          carId: id,
+          image: image,
+        );
+      } else {
+        url = currentImage!;
+      }
+      
     } else {
       var docRef = db.collection("cars").doc();
       id = docRef.id;
