@@ -67,29 +67,62 @@ class LoginPage extends StatelessWidget {
                 isLoading: provider.loggingIn,
                 isDisabled: provider.loggingIn,
                 onTap: () async {
-                  await provider.login(
-                    email: usernameController.text,
-                    password: passwordController.text,
-                    onSuccess: (val) async {
-                      await context.read<UserProvider>().fetchUser(
-                            userId: val,
-                            onSuccess: (val) async {
-                              await context
-                                  .read<CategoryProvider>()
-                                  .fetchCategories();
-                              await context.read<CarProvider>().fetchCars();
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  Navigation.routeName, ((route) => false));
-                            },
-                            onError: (val) {
-                              log(val);
-                            },
-                          );
-                    },
-                    onError: (val) {
-                      log(val);
-                    },
-                  );
+                  if (usernameController.text == '' ||
+                      passwordController.text == '') {
+                        showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    "Oops",
+                                    style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: kPrimaryColor,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    "Please fill all fields",
+                                    style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: kSecondaryColor,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      child: const Text("OK"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                  } else {
+                    await provider.login(
+                      email: usernameController.text,
+                      password: passwordController.text,
+                      onSuccess: (val) async {
+                        await context.read<UserProvider>().fetchUser(
+                              userId: val,
+                              onSuccess: (val) async {
+                                await context
+                                    .read<CategoryProvider>()
+                                    .fetchCategories();
+                                await context.read<CarProvider>().fetchCars();
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    Navigation.routeName, ((route) => false));
+                              },
+                              onError: (val) {
+                                log(val);
+                              },
+                            );
+                      },
+                      onError: (val) {
+                        log(val);
+                      },
+                    );
+                  }
                 },
               );
             })

@@ -163,90 +163,131 @@ class _CarCreateState extends State<CarCreate> {
                         isDisabled: provider.isUploadingCar,
                         title: widget.isUpdate ? "Update" : "Create",
                         onTap: () {
-                          provider.uploadCar(
-                            isUpdate: widget.isUpdate,
-                            currentImage:
-                                widget.car != null ? widget.car!.image : null,
-                            image: image,
-                            car: Car(
-                              name: displayNameController.text,
-                              rate: int.parse(rateController.text),
-                              categoryId: categoryId.toString(),
-                              manufacturer: manufacturerController.text,
-                              model: modelController.text,
-                              year: int.parse(yearController.text),
-                              mileage: int.parse(mileageController.text),
-                              seats: int.parse(seatController.text),
-                              quantity: int.parse(quantityController.text),
-                              fuel: fuelController.text,
-                              id: widget.car == null ? "" : widget.car!.id,
-                              image:
-                                  widget.car == null ? "" : widget.car!.image,
-                            ),
-                            onSuccess: (va) {
-                              Navigator.pop(context);
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "Completed",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kPrimaryColor,
-                                      fontSize: 14.sp,
-                                    ),
+                          if (displayNameController.text == '' ||
+                              categoryId == null ||
+                              rateController.text == '' ||
+                              manufacturerController.text == '' ||
+                              modelController.text == '' ||
+                              yearController.text == '' ||
+                              mileageController.text == '' ||
+                              seatController.text == '' ||
+                              fuelController.text == '' ||
+                              quantityController.text == '') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  "Oops",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kPrimaryColor,
+                                    fontSize: 14.sp,
                                   ),
-                                  content: Text(
-                                    "Car updation was successfully completed.",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kSecondaryColor,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
                                 ),
-                              );
-                            },
-                            onError: (val) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "Something went wrong",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kPrimaryColor,
-                                      fontSize: 14.sp,
-                                    ),
+                                content: Text(
+                                  "Please fill all fields",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kSecondaryColor,
+                                    fontSize: 10.sp,
                                   ),
-                                  content: Text(
-                                    val.toString(),
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kSecondaryColor,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
                                 ),
-                              );
-                            },
-                          );
+                                actions: [
+                                  FlatButton(
+                                    child: const Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            provider.uploadCar(
+                              isUpdate: widget.isUpdate,
+                              currentImage:
+                                  widget.car != null ? widget.car!.image : null,
+                              image: image,
+                              car: Car(
+                                name: displayNameController.text,
+                                rate: int.parse(rateController.text),
+                                categoryId: categoryId.toString(),
+                                manufacturer: manufacturerController.text,
+                                model: modelController.text,
+                                year: int.parse(yearController.text),
+                                mileage: int.parse(mileageController.text),
+                                seats: int.parse(seatController.text),
+                                quantity: int.parse(quantityController.text),
+                                fuel: fuelController.text,
+                                id: widget.car == null ? "" : widget.car!.id,
+                                image:
+                                    widget.car == null ? "" : widget.car!.image,
+                              ),
+                              onSuccess: (va) {
+                                Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Completed",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                    content: Text(
+                                      "Car updation was successfully completed.",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              onError: (val) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Something went wrong",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                    content: Text(
+                                      val.toString(),
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
                       ),
                       if (widget.isUpdate)
@@ -260,65 +301,65 @@ class _CarCreateState extends State<CarCreate> {
                               onSuccess: (va) {
                                 Navigator.pop(context);
                                 showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title:  Text(
-                                        "Deleted",
-                                        style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          color: kPrimaryColor,
-                                          fontSize: 14.sp,
-                                        ),
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Deleted",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
                                       ),
-                                      content:  Text(
-                                          "Car deletion was successfully completed.",
-                                          style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          color: kSecondaryColor,
-                                          fontSize: 10.sp,
-                                        ),
-                                          ),
-                                      actions: [
-                                        FlatButton(
-                                          child: const Text("OK"),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
                                     ),
-                                  );
+                                    content: Text(
+                                      "Car deletion was successfully completed.",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                               onError: (val) {
                                 showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title:  Text(
-                                        "Something went wrong",
-                                        style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          color: kPrimaryColor,
-                                          fontSize: 14.sp,
-                                        ),
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Something went wrong",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
                                       ),
-                                      content:  Text(
-                                          val.toString(),
-                                          style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          color: kSecondaryColor,
-                                          fontSize: 10.sp,
-                                        ),
-                                          ),
-                                      actions: [
-                                        FlatButton(
-                                          child: const Text("OK"),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
                                     ),
-                                  );
+                                    content: Text(
+                                      val.toString(),
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                             );
                           },

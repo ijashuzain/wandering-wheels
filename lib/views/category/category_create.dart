@@ -100,82 +100,115 @@ class _CategoryCreateState extends State<CategoryCreate> {
                         isLoading: provider.isUploadingCategory,
                         isDisabled: provider.isUploadingCategory,
                         onTap: () {
-                          provider.uploadCategory(
-                            image: image,
-                            isUpdate: widget.isUpdate,
-                            currentImage:
-                                widget.isUpdate ? widget.category!.image : null,
-                            categoryName: categoryNameController.text,
-                            categoryId:
-                                widget.isUpdate ? widget.category!.id : "",
-                            onSuccess: (val) {
-                              log("Success");
-                              Navigator.pop(context);
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "Completed",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kPrimaryColor,
-                                      fontSize: 14.sp,
-                                    ),
+                          if (categoryNameController.text == '') {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  "Oops",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kPrimaryColor,
+                                    fontSize: 14.sp,
                                   ),
-                                  content: Text(
-                                    "Category updation was successfully completed.",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kSecondaryColor,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
                                 ),
-                              );
-                            },
-                            onError: (val) {
-                              log(val);
-                              categoryNameController.clear();
-                              image = null;
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "Something went wrong",
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kPrimaryColor,
-                                      fontSize: 14.sp,
-                                    ),
+                                content: Text(
+                                  "Please fill all fields",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    color: kSecondaryColor,
+                                    fontSize: 10.sp,
                                   ),
-                                  content: Text(
-                                    val.toString(),
-                                    style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: kSecondaryColor,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                  actions: [
-                                    FlatButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
                                 ),
-                              );
-                            },
-                          );
+                                actions: [
+                                  FlatButton(
+                                    child: const Text("OK"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            provider.uploadCategory(
+                              image: image,
+                              isUpdate: widget.isUpdate,
+                              currentImage: widget.isUpdate
+                                  ? widget.category!.image
+                                  : null,
+                              categoryName: categoryNameController.text,
+                              categoryId:
+                                  widget.isUpdate ? widget.category!.id : "",
+                              onSuccess: (val) {
+                                log("Success");
+                                Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Completed",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                    content: Text(
+                                      "Category updation was successfully completed.",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              onError: (val) {
+                                log(val);
+                                categoryNameController.clear();
+                                image = null;
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      "Something went wrong",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kPrimaryColor,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                    content: Text(
+                                      val.toString(),
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: kSecondaryColor,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
                       ),
                       if (widget.isUpdate)

@@ -81,40 +81,76 @@ class SignupPage extends StatelessWidget {
                   isLoading: provider.signingUp,
                   isDisabled: provider.signingUp,
                   onTap: () async {
-                    await provider.signup(
-                      context: context,
-                      email: emailController.text,
-                      password: passwordController.text,
-                      user: UserData(
-                        name: nameController.text,
+                    if (nameController.text == '' ||
+                        emailController.text == '' ||
+                        phoneController.text == '' ||
+                        placeController.text == '' ||
+                        passwordController.text == '') {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                            "Oops",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              color: kPrimaryColor,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          content: Text(
+                            "Please fill all fields",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              color: kSecondaryColor,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          actions: [
+                            FlatButton(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      await provider.signup(
+                        context: context,
                         email: emailController.text,
-                        phone: phoneController.text,
-                        type: "Member",
-                        trackMe: false,
-                      ),
-                      onSuccess: (val) async {
-                        await context.read<UserProvider>().fetchUser(
-                              userId: val,
-                              onSuccess: (val) async {
-                                await context
-                                    .read<CategoryProvider>()
-                                    .fetchCategories();
-                                await context.read<CarProvider>().fetchCars();
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  Navigation.routeName,
-                                  ((route) => false),
-                                );
-                              },
-                              onError: (val) {
-                                log(val);
-                              },
-                            );
-                      },
-                      onError: (val) {
-                        log(val);
-                      },
-                    );
+                        password: passwordController.text,
+                        user: UserData(
+                          name: nameController.text,
+                          email: emailController.text,
+                          phone: phoneController.text,
+                          type: "Member",
+                          trackMe: false,
+                        ),
+                        onSuccess: (val) async {
+                          await context.read<UserProvider>().fetchUser(
+                                userId: val,
+                                onSuccess: (val) async {
+                                  await context
+                                      .read<CategoryProvider>()
+                                      .fetchCategories();
+                                  await context.read<CarProvider>().fetchCars();
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    Navigation.routeName,
+                                    ((route) => false),
+                                  );
+                                },
+                                onError: (val) {
+                                  log(val);
+                                },
+                              );
+                        },
+                        onError: (val) {
+                          log(val);
+                        },
+                      );
+                    }
                   },
                 );
               })

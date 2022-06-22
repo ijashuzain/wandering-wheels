@@ -146,13 +146,28 @@ class _CarBookingState extends State<CarBooking> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content:
-                                  const Text("Please fill required fileds"),
+                              title: Text(
+                                "Oops",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: kPrimaryColor,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                              content: Text(
+                                "Please fill all fields",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: kSecondaryColor,
+                                  fontSize: 10.sp,
+                                ),
+                              ),
                               actions: [
                                 FlatButton(
                                   child: const Text("OK"),
-                                  onPressed: () => Navigator.pop(context),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ],
                             ),
@@ -166,7 +181,7 @@ class _CarBookingState extends State<CarBooking> {
                                   showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      title:  Text(
+                                      title: Text(
                                         "Completed",
                                         style: TextStyle(
                                           fontFamily: "Poppins",
@@ -174,14 +189,14 @@ class _CarBookingState extends State<CarBooking> {
                                           fontSize: 14.sp,
                                         ),
                                       ),
-                                      content:  Text(
-                                          "Car booking has successfully completed. Please wait for confirmation.",
-                                          style: TextStyle(
+                                      content: Text(
+                                        "Car booking has successfully completed. Please wait for confirmation.",
+                                        style: TextStyle(
                                           fontFamily: "Poppins",
                                           color: kSecondaryColor,
                                           fontSize: 10.sp,
                                         ),
-                                          ),
+                                      ),
                                       actions: [
                                         FlatButton(
                                           child: const Text("OK"),
