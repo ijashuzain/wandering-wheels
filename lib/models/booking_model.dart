@@ -17,6 +17,7 @@ class Booking {
   String? returnedDate;
   double? latitude;
   double? longitude;
+  String rate;
 
   Booking({
     required this.driverName,
@@ -34,6 +35,7 @@ class Booking {
     required this.returnedDate,
     this.latitude,
     this.longitude,
+    required this.rate,
   });
 
   Booking.fromJson(Map<String, dynamic> json)
@@ -51,7 +53,8 @@ class Booking {
         insuranceType = json['insuranceType'],
         latitude = json['latitude'] ?? 0,
         longitude = json['longitude'] ?? 0,
-        car = json['car'];
+        car = json['car'],
+        rate = json['rate'] ?? '';
 
   Map<String, dynamic> toJson() => {
         "pickup_date": pickupDate,
@@ -69,5 +72,6 @@ class Booking {
         "insuranceType": insuranceType,
         "latitude": latitude,
         "longitude": longitude,
+        'rate': rate,
       };
 }

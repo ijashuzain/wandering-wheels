@@ -8,6 +8,8 @@ import 'package:wandering_wheels/views/booking/booking_track.dart';
 import 'package:wandering_wheels/views/booking/widgets/booking_card.dart';
 import 'package:wandering_wheels/views/booking/widgets/booking_sheet.dart';
 
+import '../../constants/status.dart';
+
 class BookingAll extends StatefulWidget {
   static String routeName = '/rentals';
   const BookingAll({Key? key}) : super(key: key);
@@ -61,7 +63,7 @@ class _BookingAllState extends State<BookingAll> {
 
             if (provider.allBookings.isEmpty) {
               return const Center(
-                child: Text("No rentals found"),
+                child: Text("No bookings found"),
               );
             }
 
@@ -77,6 +79,14 @@ class _BookingAllState extends State<BookingAll> {
                       shrinkWrap: true,
                       itemCount: provider.allBookings.length,
                       itemBuilder: (context, index) {
+                        num payableAmount = 0;
+                        if(provider.allBookings[index].rate.isNotEmpty){
+                          payableAmount = int.parse(provider.allBookings[index].rate);
+                          if(provider.allBookings[index].status == BookingStatus.overdue){
+                            var dueDifference = DateTime.now().difference(DateTime.parse(provider.allBookings[index].returnDate)).inDays;
+                            payableAmount = payableAmount + (provider.allBookings[index].car!.rate * dueDifference);
+                          }
+                        }
                         return BookingCard(
                           driverName: provider.allBookings[index].driverName,
                           carName: provider.allBookings[index].car!.name,
@@ -85,6 +95,7 @@ class _BookingAllState extends State<BookingAll> {
                           status: provider.allBookings[index].status,
                           onTap: () {
                             showModalBottomSheet(
+                              isScrollControlled: true,
                               context: context,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -92,6 +103,7 @@ class _BookingAllState extends State<BookingAll> {
                               builder: (context) => BookingDetailSheet(
                                 isManage: true,
                                 isLoading: provider.bookingUpdating,
+                                rate: payableAmount.toString(),
                                 driverName:
                                     provider.allBookings[index].driverName,
                                 carName: provider.allBookings[index].car!.name,

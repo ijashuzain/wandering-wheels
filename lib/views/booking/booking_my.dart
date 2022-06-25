@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/constants/status.dart';
 import 'package:wandering_wheels/providers/booking_provider.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/views/booking/booking_track.dart';
@@ -78,9 +79,7 @@ class _MyBookingState extends State<MyBooking> {
                         const Spacer(),
                         IconButton(
                           onPressed: () {
-                            context
-                                .read<BookingProvider>()
-                                .fetchMyBookings(context);
+                            context.read<BookingProvider>().fetchMyBookings(context);
                           },
                           icon: const Icon(Icons.refresh),
                         ),
@@ -109,6 +108,14 @@ class _MyBookingState extends State<MyBooking> {
                     child: ListView.builder(
                       itemCount: provider.myBookings.length,
                       itemBuilder: (context, index) {
+                        num payableAmount = 0;
+                        if(provider.myBookings[index].rate.isNotEmpty){
+                          payableAmount = int.parse(provider.myBookings[index].rate);
+                          if(provider.myBookings[index].status == BookingStatus.overdue){
+                            var dueDifference = DateTime.now().difference(DateTime.parse(provider.myBookings[index].returnDate)).inDays;
+                            payableAmount = payableAmount + (provider.myBookings[index].car!.rate * dueDifference);
+                          }
+                        }
                         return BookingCard(
                           driverName: provider.myBookings[index].driverName,
                           carName: provider.myBookings[index].car!.name,
@@ -117,63 +124,43 @@ class _MyBookingState extends State<MyBooking> {
                           status: provider.myBookings[index].status,
                           onTap: () {
                             showModalBottomSheet(
+                              isScrollControlled: true,
                               context: _scaffoldKey.currentState!.context,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                               builder: (context) => BookingDetailSheet(
+                                rate: payableAmount.toString(),
                                 isLoading: provider.bookingUpdating,
-                                driverName:
-                                    provider.myBookings[index].driverName,
+                                driverName: provider.myBookings[index].driverName,
                                 carName: provider.myBookings[index].car!.name,
-                                driverEmail:
-                                    provider.myBookings[index].driverEmail,
-                                driverPhone:
-                                    provider.myBookings[index].driverPhone,
-                                driverPlace:
-                                    provider.myBookings[index].driverPlace,
-                                pickupDate:
-                                    provider.myBookings[index].pickupDate,
-                                returnDate:
-                                    provider.myBookings[index].returnDate,
+                                driverEmail: provider.myBookings[index].driverEmail,
+                                driverPhone: provider.myBookings[index].driverPhone,
+                                driverPlace: provider.myBookings[index].driverPlace,
+                                pickupDate: provider.myBookings[index].pickupDate,
+                                returnDate: provider.myBookings[index].returnDate,
                                 status: provider.myBookings[index].status,
-                                returnedDate:
-                                    provider.myBookings[index].returnedDate!,
+                                returnedDate: provider.myBookings[index].returnedDate!,
                                 carId: provider.myBookings[index].car!.id!,
                                 onTrack: () {
                                   Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, BookingTrack.routeName);
+                                  Navigator.pushNamed(context, BookingTrack.routeName);
                                 },
                                 onStatusUpdate: (val) async {
                                   log(val);
-                                  await context
-                                      .read<BookingProvider>()
-                                      .updateBookingStatus(
+                                  await context.read<BookingProvider>().updateBookingStatus(
                                         status: val,
-                                        id: provider
-                                            .myBookings[index].bookingId,
+                                        id: provider.myBookings[index].bookingId,
                                       );
-                                  Navigator.pop(
-                                      _scaffoldKey.currentState!.context);
-                                  await context
-                                      .read<BookingProvider>()
-                                      .fetchMyBookings(
-                                          _scaffoldKey.currentState!.context);
+                                  Navigator.pop(_scaffoldKey.currentState!.context);
+                                  await context.read<BookingProvider>().fetchMyBookings(_scaffoldKey.currentState!.context);
                                 },
                                 onDelete: () async {
-                                  await context
-                                      .read<BookingProvider>()
-                                      .deleteBooking(
-                                        id: provider
-                                            .myBookings[index].bookingId,
+                                  await context.read<BookingProvider>().deleteBooking(
+                                        id: provider.myBookings[index].bookingId,
                                       );
-                                  Navigator.pop(
-                                      _scaffoldKey.currentState!.context);
-                                  await context
-                                      .read<BookingProvider>()
-                                      .fetchMyBookings(
-                                          _scaffoldKey.currentState!.context);
+                                  Navigator.pop(_scaffoldKey.currentState!.context);
+                                  await context.read<BookingProvider>().fetchMyBookings(_scaffoldKey.currentState!.context);
                                 },
                               ),
                             );

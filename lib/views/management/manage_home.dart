@@ -42,7 +42,7 @@ class ManageHome extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Create and manage car rental details ",
+                        "Create and manage booking details ",
                         style: TextStyle(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w500,
@@ -57,8 +57,8 @@ class ManageHome extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 3.h, right: 3.h, left: 3.h),
                 child: ManageOptionBig(
-                  title: "All Bookings",
-                  subtitle: "Currently 10 car rentals ongoing",
+                  title: "Bookings",
+                  subtitle: "Total Bookings placed",
                   icon: Icons.car_rental,
                   onTap: () {
                     Navigator.pushNamed(context, BookingAll.routeName);
@@ -71,8 +71,8 @@ class ManageHome extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ManageOptionSmall(
-                      title: "Categeries",
-                      subtitle: "Total 10 categories",
+                      title: "Categories",
+                      subtitle: "Total categories",
                       icon: Icons.list,
                       onTap: () {
                         Navigator.push(
@@ -87,7 +87,7 @@ class ManageHome extends StatelessWidget {
                     ),
                     ManageOptionSmall(
                       title: "Cars",
-                      subtitle: "Total 10 cars",
+                      subtitle: "Total cars",
                       icon: Icons.car_repair_rounded,
                       onTap: () {
                         context.read<CarProvider>().fetchCars();

@@ -22,6 +22,7 @@ class BookingDetailSheet extends StatelessWidget {
   final String status;
   final Function(String) onStatusUpdate;
   final bool isLoading;
+  final String rate;
   final VoidCallback onDelete;
 
   BookingDetailSheet({
@@ -41,12 +42,13 @@ class BookingDetailSheet extends StatelessWidget {
     required this.onDelete,
     required this.returnedDate,
     required this.carId,
+    required this.rate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.h,
+      height: 60.h,
       width: 100.w,
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -141,9 +143,19 @@ class BookingDetailSheet extends StatelessWidget {
               ],
             ),
             SizedBox(height: 4.h),
-            RentalSheetData(
-              title: "Retuned Date",
-              value: returnedDate == '' ? "Not yet returned" : returnedDate,
+            Row(
+              children: [
+                RentalSheetData(
+                  title: "Retuned Date",
+                  value: returnedDate == '' ? "Not yet returned" : returnedDate,
+                ),
+                const Spacer(),
+                RentalSheetData(
+                  isRight: true,
+                  title: "Rate",
+                  value: rate,
+                ),
+              ],
             ),
             SizedBox(height: 2.h),
             Center(

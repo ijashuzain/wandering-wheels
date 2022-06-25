@@ -78,9 +78,19 @@ class _CarDetailsState extends State<CarDetails> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CarTitle(
-                                title: provider.currentCar!.name,
-                                category: context.read<CategoryProvider>().getCategoryName(provider.currentCar!.categoryId),
+                              Row(
+                                children: [
+                                  CarTitle(
+                                    title: provider.currentCar!.name,
+                                    category: context.read<CategoryProvider>().getCategoryName(provider.currentCar!.categoryId),
+                                  ),
+                                  const Spacer(),
+                                  SpecWidget(
+                                    title: "Rate Per Day",
+                                    isLast: true,
+                                    content: provider.currentCar!.rate.toString(),
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 3.h),
                               CarSpecifications(

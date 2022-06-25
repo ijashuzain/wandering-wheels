@@ -50,6 +50,10 @@ class InsuranceSelector extends StatelessWidget {
                         ),
                       ),
                       const InsuranceContent(
+                        content: "Rs. 0/-",
+                        isAvilable: true,
+                      ),
+                      const InsuranceContent(
                         content: "Collision Damage Waiver",
                       ),
                       const InsuranceContent(
@@ -88,6 +92,10 @@ class InsuranceSelector extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      const InsuranceContent(
+                        content: "Rs. 500/-",
+                        isAvilable: true,
                       ),
                       const InsuranceContent(
                         content: "Collision Damage Waiver",
@@ -130,6 +138,10 @@ class InsuranceSelector extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      const InsuranceContent(
+                        content: "Rs. 1000/-",
+                        isAvilable: true,
                       ),
                       const InsuranceContent(
                         content: "Collision Damage Waiver",

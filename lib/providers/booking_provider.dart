@@ -42,6 +42,10 @@ class BookingProvider extends ChangeNotifier {
     allBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
+      bool result = await _checkForDue(booking);
+      if (result) {
+        booking.status = BookingStatus.overdue;
+      }
       log(cars.length.toString());
       var car = cars.firstWhere(
         (car) => car.id == booking.carId,
@@ -54,14 +58,25 @@ class BookingProvider extends ChangeNotifier {
     _setAllBookingLoading(false);
   }
 
+  Future<bool> _checkForDue(Booking booking) async {
+    if (booking.status != BookingStatus.overdue) {
+      var differance = DateTime.now().difference(DateTime.parse(booking.returnDate)).inDays;
+      if (differance > 0) {
+        await updateBookingStatus(status: BookingStatus.overdue, id: booking.bookingId);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   fetchMyBookings(BuildContext context) async {
     log("Fetching My Bookings");
     _setMyBookingLoading(true);
     var user = context.read<UserProvider>().currentUser;
-    var ref = await db
-        .collection('bookings')
-        .where('userId', isEqualTo: user!.id)
-        .get();
+    var ref = await db.collection('bookings').where('userId', isEqualTo: user!.id).get();
     await context.read<CarProvider>().fetchCars();
     List<Car> cars = context.read<CarProvider>().cars;
     log(cars.length.toString());
@@ -108,9 +123,7 @@ class BookingProvider extends ChangeNotifier {
       await db.collection("bookings").doc(id).update(
         {
           "status": status,
-          "returnedDate": status == BookingStatus.completed
-              ? DateFormat('yyyy-MM-dd').format(DateTime.now())
-              : '',
+          "returnedDate": status == BookingStatus.completed ? DateFormat('yyyy-MM-dd').format(DateTime.now()) : '',
         },
       );
       _setBookingUpdating(false);
