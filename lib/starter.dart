@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/map_provider.dart';
@@ -25,7 +26,7 @@ class _StarterPageState extends State<StarterPage> {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       context.read<MapProvider>().requestPermission();
-      await _checkLogin(context);
+      await _checkLoggedIn(context);
     });
     super.initState();
   }
@@ -107,16 +108,46 @@ class _StarterPageState extends State<StarterPage> {
           await context.read<UserProvider>().fetchUser(
                 userId: user.uid,
                 onSuccess: (user) async {
-                  await context.read<CategoryProvider>().fetchCategories();
-                  await context.read<CarProvider>().fetchCars();
-                  Navigator.pushReplacementNamed(context, Navigation.routeName);
+                  Navigator.pushReplacementNamed(
+                    context,
+                    Navigation.routeName,
+                  );
                 },
                 onError: (val) {
-                  Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                  Navigator.pushReplacementNamed(
+                    context,
+                    LoginPage.routeName,
+                  );
                 },
               );
         }
       },
     );
+  }
+
+  _checkLoggedIn(BuildContext context) async {
+    UserProvider provider = context.read<UserProvider>();
+    bool res = await provider.checkLoggedIn();
+    if (res) {
+      UserData? user = provider.currentUser;
+      if (user != null) {
+        await context.read<CategoryProvider>().fetchCategories();
+        await context.read<CarProvider>().fetchCars();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Navigation()),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false);
+      }
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false);
+    }
   }
 }

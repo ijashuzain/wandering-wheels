@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/providers/booking_provider.dart';
@@ -41,91 +42,99 @@ class _HomeState extends State<Home> {
           width: 100.h,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child:
-                Consumer<CarProvider>(builder: (context, carProvider, child) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 3.h, left: 3.h, top: 3.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Consumer<UserProvider>(
+            child: Consumer<CarProvider>(
+              builder: (context, carProvider, child) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 3.h, left: 3.h, top: 3.h),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Consumer<UserProvider>(
                             builder: (context, provider, child) {
-                          return Greeting(name: provider.currentUser!.name);
-                        }),
-                        SizedBox(height: 3.h),
-                        SearchWidget(
-                          controller: searchController,
-                          isSearching: carProvider.isSearching,
-                          onSearch: (val) {
-                            carProvider.searchCars(val);
-                          },
-                        ),
-                        SizedBox(height: 3.h),
-                      ],
-                    ),
-                  ),
-                  carProvider.isSearching
-                      ? SizedBox(
-                          height: 80.h,
-                          width: 100.w,
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 3.h,
-                            ),
-                            itemCount: carProvider.searchedCars.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: ((context, index) {
-                              return CarCard(
-                                carName: carProvider.searchedCars[index].name,
-                                carImage:
-                                    carProvider.searchedCars[index].image!,
-                                carRate: carProvider.searchedCars[index].rate
-                                    .toString(),
-                                onTap: () {
-                                  carProvider.setCurrentCar(
-                                      carProvider.searchedCars[index]);
-                                  Navigator.pushNamed(
-                                    context,
-                                    CarDetails.routeName,
-                                  );
-                                },
-                              );
-                            }),
+                              return Greeting(name: provider.currentUser!.name);
+                            },
                           ),
-                        )
-                      : Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 3.h, left: 3.h),
-                              child: const Heading(
-                                title: "Choose Car",
-                                subtitle: "Choose your car from the list below",
+                          SizedBox(height: 3.h),
+                          SearchWidget(
+                            controller: searchController,
+                            isSearching: carProvider.isSearching,
+                            onSearch: (val) {
+                              carProvider.searchCars(val);
+                            },
+                          ),
+                          SizedBox(height: 3.h),
+                        ],
+                      ),
+                    ),
+                    carProvider.isSearching
+                        ? SizedBox(
+                            height: 80.h,
+                            width: 100.w,
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 3.h,
                               ),
+                              itemCount: carProvider.searchedCars.length,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: ((context, index) {
+                                return CarCard(
+                                  carName: carProvider.searchedCars[index].name,
+                                  carImage:
+                                      carProvider.searchedCars[index].image!,
+                                  carRate: carProvider.searchedCars[index].rate
+                                      .toString(),
+                                  onTap: () {
+                                    carProvider.setCurrentCar(/////????
+                                        carProvider.searchedCars[index]);
+                                    Navigator.pushNamed(
+                                      context,
+                                      CarDetails.routeName,
+                                    );
+                                  },
+                                );
+                              }),
                             ),
-                            SizedBox(height: 1.h),
-                            const HomeCars(),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  right: 3.h, left: 3.h, top: 3.h),
-                              child: const Heading(
-                                title: "Choose Category",
-                                subtitle: "Find a car from catergory list",
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            const HomeCategory(),
-                          ],
-                        ),
-                ],
-              );
-            }),
+                          )
+                        : Consumer<UserProvider>(
+                            builder: (context, provider, child) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 3.h, left: 3.h),
+                                    child: const Heading(
+                                      title: "Cars",
+                                      subtitle: "Here is all available cars",
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  const HomeCars(),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 3.h, left: 3.h, top: 3.h),
+                                    child: const Heading(
+                                      title: "Categories",
+                                      subtitle:
+                                          "Here is all available catergories",
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  const HomeCategory(),
+                                ],
+                              );
+                            },
+                          ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

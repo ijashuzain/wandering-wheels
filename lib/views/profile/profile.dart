@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/models/user_model.dart';
@@ -144,44 +145,52 @@ class _ProfileState extends State<Profile> {
                       title: "Signout",
                       onTap: () async {
                         await FirebaseAuth.instance.signOut();
+                        SharedPreferences localdb =
+                            await SharedPreferences.getInstance();
+                        localdb.clear();
                         Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                            (route) => false);
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                          (route) => false,
+                        );
                       },
                     ),
                     Consumer<UserProvider>(builder: (context, provider, child) {
-                      return provider.currentUser!.type == "Admin" ? const SizedBox() : Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 4.w),
-                            child: Text(
-                              "Track Me",
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor,
-                                fontFamily: "Poppins",
-                              ),
-                            ),
-                          ),
-                          const Spacer(),
-                          provider.isUpdatingTracking
-                              ? const SizedBox(
-                                height: 50,
-                                width: 50,
-                                  child: CupertinoActivityIndicator())
-                              : Switch(
-                                  value: provider.isTrackingEnabled,
-                                  onChanged: (val) async {
-                                    await provider.updateTrack(val);
-                                    context.read<UserProvider>().checkTrackingStatus(context);
-                                  },
+                      return provider.currentUser!.type == "Admin"
+                          ? const SizedBox()
+                          : Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 4.w),
+                                  child: Text(
+                                    "Track Me",
+                                    style: TextStyle(
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: kPrimaryColor,
+                                      fontFamily: "Poppins",
+                                    ),
+                                  ),
                                 ),
-                        ],
-                      );
+                                const Spacer(),
+                                provider.isUpdatingTracking
+                                    ? const SizedBox(
+                                        height: 50,
+                                        width: 50,
+                                        child: CupertinoActivityIndicator())
+                                    : Switch(
+                                        value: provider.isTrackingEnabled,
+                                        onChanged: (val) async {
+                                          await provider.updateTrack(val);
+                                          context
+                                              .read<UserProvider>()
+                                              .checkTrackingStatus(context);
+                                        },
+                                      ),
+                              ],
+                            );
                     })
                   ],
                 ),

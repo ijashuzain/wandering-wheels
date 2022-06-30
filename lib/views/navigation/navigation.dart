@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wandering_wheels/constants/colors.dart';
@@ -45,40 +46,38 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black26,
-        body: Center(
+    return Scaffold(
+      backgroundColor: Colors.black26,
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text("Press back button again to close the app."),),
+        child: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar:
-            Consumer<UserProvider>(builder: (context, provider, child) {
-          return BottomNavigationBar(
-            backgroundColor: Colors.white,
-            elevation: 10,
-            type: BottomNavigationBarType.fixed,
-            iconSize: 30,
-            items: <BottomNavigationBarItem>[
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: "Home"),
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.bookmark_added), label: "Bookings"),
-              if (provider.currentUser!.type == "Admin")
-                const BottomNavigationBarItem(
-                    icon: Icon(Icons.cases_sharp), label: "Manage"),
-              const BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: "Profile")
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: kPrimaryColor,
-            unselectedItemColor: Colors.grey[400],
-            onTap: _onItemTapped,
-          );
-        }),
       ),
+      bottomNavigationBar:
+          Consumer<UserProvider>(builder: (context, provider, child) {
+        return BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 10,
+          type: BottomNavigationBarType.fixed,
+          iconSize: 30,
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.home), label: "Home"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.bookmark_added), label: "Bookings"),
+            if (provider.currentUser!.type == "Admin")
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.cases_sharp), label: "Manage"),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.person), label: "Profile")
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: kPrimaryColor,
+          unselectedItemColor: Colors.grey[400],
+          onTap: _onItemTapped,
+        );
+      }),
     );
   }
 }
