@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:intl/intl.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:sizer/sizer.dart';
-import 'package:jiffy/jiffy.dart';   
+import 'package:jiffy/jiffy.dart';
 
 class CDatePicker extends StatefulWidget {
   final String title;
   final String value;
   final Function(String) onSelected;
+  final DateTime firstDate;
   const CDatePicker({
     Key? key,
     required this.title,
-    
     this.value = '',
     required this.onSelected,
+    required this.firstDate,
   }) : super(key: key);
 
   @override
@@ -21,7 +23,6 @@ class CDatePicker extends StatefulWidget {
 }
 
 class _CDatePickerState extends State<CDatePicker> {
-
   DateTime selectedDate = DateTime.now();
   String selectedDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -29,7 +30,7 @@ class _CDatePickerState extends State<CDatePicker> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
+        firstDate: widget.firstDate,
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {

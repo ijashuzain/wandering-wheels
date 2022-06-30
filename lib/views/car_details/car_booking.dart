@@ -73,9 +73,11 @@ class _CarBookingState extends State<CarBooking> {
                       const UnderlinedHeading("Rental Date"),
                       SizedBox(height: 2.h),
                       CDatePicker(
+                        firstDate: DateTime.now(),
                         onSelected: (val) {
                           setState(() {
                             pickupDate = val;
+                            returnDate = '';
                           });
                         },
                         title: "Pickup Date",
@@ -83,6 +85,9 @@ class _CarBookingState extends State<CarBooking> {
                       ),
                       SizedBox(height: 2.h),
                       CDatePicker(
+                        firstDate: pickupDate == ''
+                            ? DateTime.now()
+                            : DateTime.parse(pickupDate),
                         onSelected: (val) {
                           setState(() {
                             returnDate = val;
@@ -111,7 +116,8 @@ class _CarBookingState extends State<CarBooking> {
                   builder: (context, provider, child) {
                     Car car = context.read<CarProvider>().currentCar!;
                     UserData? user = context.read<UserProvider>().currentUser;
-                    String insuranceType = context.read<InsuranceProvider>().selectedInsuranceType;
+                    String insuranceType =
+                        context.read<InsuranceProvider>().selectedInsuranceType;
                     String amount = insuranceType == "NONE"
                         ? car.rate.toString()
                         : insuranceType == "BASIC"
@@ -119,9 +125,13 @@ class _CarBookingState extends State<CarBooking> {
                             : (car.rate + 1000).toString();
                     int dateDefference = 1;
                     if (pickupDate.isNotEmpty && returnDate.isNotEmpty) {
-                      var date1 = DateTime.parse(pickupDate);
-                      var date2 = DateTime.parse(returnDate);
-                      dateDefference = date2.difference(date1).inDays;
+                      if (pickupDate == returnDate) {
+                        dateDefference = 1;
+                      } else {
+                        var date1 = DateTime.parse(pickupDate);
+                        var date2 = DateTime.parse(returnDate);
+                        dateDefference = date2.difference(date1).inDays;
+                      }
                     }
                     var payableAmount = int.parse(amount) * dateDefference;
                     log(dateDefference.toString());
@@ -130,7 +140,11 @@ class _CarBookingState extends State<CarBooking> {
                       children: [
                         Text(
                           "Payable Amount : $payableAmount",
-                          style: TextStyle(fontFamily: "Poppins", fontSize: 12.sp, fontWeight: FontWeight.bold, color: kSecondaryColor),
+                          style: TextStyle(
+                              fontFamily: "Poppins",
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold,
+                              color: kSecondaryColor),
                         ),
                         SizedBox(height: 1.h),
                         CButton(
@@ -156,7 +170,12 @@ class _CarBookingState extends State<CarBooking> {
                             );
 
                             //validate
-                            if (nameController.text.isEmpty || phoneController.text.isEmpty || emailController.text.isEmpty || placeController.text.isEmpty || pickupDate.isEmpty || returnDate.isEmpty) {
+                            if (nameController.text.isEmpty ||
+                                phoneController.text.isEmpty ||
+                                emailController.text.isEmpty ||
+                                placeController.text.isEmpty ||
+                                pickupDate.isEmpty ||
+                                returnDate.isEmpty) {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
@@ -240,7 +259,8 @@ class _CarBookingState extends State<CarBooking> {
                                           actions: [
                                             FlatButton(
                                               child: const Text("OK"),
-                                              onPressed: () => Navigator.pop(context),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
                                             ),
                                           ],
                                         ),

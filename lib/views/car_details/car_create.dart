@@ -35,6 +35,7 @@ class _CarCreateState extends State<CarCreate> {
   TextEditingController mileageController = TextEditingController();
   TextEditingController seatController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
+  TextEditingController regController = TextEditingController();
   TextEditingController fuelController = TextEditingController();
 
   File? image;
@@ -65,6 +66,7 @@ class _CarCreateState extends State<CarCreate> {
       seatController.text = widget.car?.seats.toString() ?? '';
       quantityController.text = widget.car?.quantity.toString() ?? '';
       fuelController.text = widget.car?.fuel ?? '';
+      regController.text = widget.car?.regNumber ?? '';
     }
     super.initState();
   }
@@ -138,6 +140,9 @@ class _CarCreateState extends State<CarCreate> {
                       CTextField(controller: yearController, hint: "Year"),
                       CTextField(
                           controller: mileageController, hint: "Mileage"),
+                      CTextField(
+                          controller: regController,
+                          hint: "Registration Number"),
                       CTextField(controller: seatController, hint: "Seats"),
                       CTextField(controller: fuelController, hint: "Fuel"),
                       CTextField(
@@ -172,6 +177,7 @@ class _CarCreateState extends State<CarCreate> {
                               mileageController.text == '' ||
                               seatController.text == '' ||
                               fuelController.text == '' ||
+                              regController.text == '' ||
                               quantityController.text == '') {
                             showDialog(
                               context: context,
@@ -239,6 +245,7 @@ class _CarCreateState extends State<CarCreate> {
                                   widget.car != null ? widget.car!.image : null,
                               image: image,
                               car: Car(
+                                regNumber: regController.text,
                                 name: displayNameController.text,
                                 rate: int.parse(rateController.text),
                                 categoryId: categoryId.toString(),

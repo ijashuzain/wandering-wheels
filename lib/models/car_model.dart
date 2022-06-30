@@ -10,6 +10,7 @@ class Car {
   int seats;
   int quantity;
   String fuel;
+  String regNumber;
   String? id;
 
   Car({
@@ -24,6 +25,7 @@ class Car {
     required this.seats,
     required this.quantity,
     required this.fuel,
+    required this.regNumber,
     this.id,
   });
 
@@ -40,6 +42,7 @@ class Car {
         seats = json['seats'],
         fuel = json['fuel'],
         id = json['id'],
+        regNumber = json['regNumber'],
         quantity = json['quantity'];
 
   toMap() {
@@ -54,6 +57,7 @@ class Car {
       'mileage': mileage,
       'seats': seats,
       'fuel': fuel,
+      'regNumber':regNumber,
       'quantity': quantity,
       'id': id
     };
