@@ -8,6 +8,7 @@ import 'package:wandering_wheels/providers/auth_provider.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
+import 'package:wandering_wheels/utils/globals.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/navigation/navigation.dart';
 import 'package:wandering_wheels/widgets/auth_title.dart';
@@ -90,7 +91,7 @@ class SignupPage extends StatelessWidget {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text(
-                            "Oops",
+                            "Error",
                             style: TextStyle(
                               fontFamily: "Poppins",
                               color: kPrimaryColor,
@@ -142,11 +143,19 @@ class SignupPage extends StatelessWidget {
                                   );
                                 },
                                 onError: (val) {
+                                  Globals.showCustomDialog(
+                                      context: context,
+                                      title: "Error",
+                                      content: val);
                                   log(val);
                                 },
                               );
                         },
                         onError: (val) {
+                          Globals.showCustomDialog(
+                              context: context,
+                              title: "Error",
+                              content: val);
                           log(val);
                         },
                       );

@@ -21,13 +21,22 @@ class AuthProvider extends ChangeNotifier {
       _setLoggingIn(false);
       onSuccess(credential.user!.uid);
     } on FirebaseAuthException catch (e) {
+      _setLoggingIn(false);
       if (e.code == 'user-not-found') {
         _setLoggingIn(false);
         onError('No user found for that email.');
+      } else if (e.code == "invalid-email") {
+        onError('Invalid email address');
+      } else if (e.code == "user-disabled") {
+        onError('User corresponding to the given email has been disabled');
       } else if (e.code == 'wrong-password') {
-        _setLoggingIn(false);
         onError('Wrong password provided for that user.');
+      } else {
+        onError('An unknown error has invoked. Please check user credentials.');
       }
+    } catch (e) {
+      _setLoggingIn(false);
+      onError(e.toString());
     }
   }
 
@@ -58,14 +67,18 @@ class AuthProvider extends ChangeNotifier {
           );
       _setSigningUp(false);
     } on FirebaseAuthException catch (e) {
+      _setSigningUp(false);
       if (e.code == 'weak-password') {
-        _setSigningUp(false);
         onError('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        _setSigningUp(false);
         onError('The account already exists for that email.');
+      } else if (e.code == "operation-not-allowed") {
+        onError('An unknown error from server');
+      } else if (e.code == "invalid-email") {
+        onError('Invalid email address');
+      } else {
+        onError('Something went wrong');
       }
-      _setSigningUp(false);
     } catch (e) {
       _setSigningUp(false);
       onError(e.toString());

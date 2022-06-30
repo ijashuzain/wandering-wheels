@@ -9,6 +9,7 @@ import 'package:wandering_wheels/providers/auth_provider.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
+import 'package:wandering_wheels/utils/globals.dart';
 import 'package:wandering_wheels/views/authentication/signup_page.dart';
 import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/navigation/navigation.dart';
@@ -27,7 +28,9 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DoubleBackToCloseApp(
-        snackBar: const SnackBar(content: Text("Press back button again to close the app."),),
+        snackBar: const SnackBar(
+          content: Text("Press back button again to close the app."),
+        ),
         child: SizedBox(
           height: 100.h,
           width: 100.h,
@@ -117,11 +120,19 @@ class LoginPage extends StatelessWidget {
                                       Navigation.routeName, ((route) => false));
                                 },
                                 onError: (val) {
+                                  Globals.showCustomDialog(
+                                      context: context,
+                                      title: "Error",
+                                      content: val);
                                   log(val);
                                 },
                               );
                         },
                         onError: (val) {
+                          Globals.showCustomDialog(
+                              context: context,
+                              title: "Error",
+                              content: val);
                           log(val);
                         },
                       );
