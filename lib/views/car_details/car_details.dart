@@ -101,6 +101,7 @@ class _CarDetailsState extends State<CarDetails> {
                                 ),
                                 SizedBox(height: 3.h),
                                 CarSpecifications(
+                                  regNumber: provider.currentCar!.regNumber,
                                   year: provider.currentCar!.year.toString(),
                                   manufacturer:
                                       provider.currentCar!.manufacturer,
@@ -109,6 +110,8 @@ class _CarDetailsState extends State<CarDetails> {
                                       provider.currentCar!.mileage.toString(),
                                   seats: provider.currentCar!.seats.toString(),
                                   fuel: provider.currentCar!.fuel,
+                                  qty: provider.currentCar!.quantity,
+                                  
                                 ),
                                 SizedBox(height: 3.h),
                                 userProvider.currentUser!.type == "Admin"

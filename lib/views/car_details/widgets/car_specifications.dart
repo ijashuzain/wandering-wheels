@@ -7,9 +7,11 @@ class CarSpecifications extends StatelessWidget {
   final String year;
   final String manufacturer;
   final String model;
+  final int qty;
   final String mileage;
   final String seats;
   final String fuel;
+  final String regNumber;
   const CarSpecifications({
     Key? key,
     required this.year,
@@ -18,11 +20,13 @@ class CarSpecifications extends StatelessWidget {
     required this.mileage,
     required this.seats,
     required this.fuel,
+    required this.regNumber, required this.qty,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const UnderlinedHeading("Vehicle Specifications"),
         SizedBox(height: 1.h),
@@ -64,7 +68,24 @@ class CarSpecifications extends StatelessWidget {
               content: fuel,
             ),
           ],
-        )
+        ),
+        SizedBox(height: 3.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SpecWidget(
+              isFirst: true,
+              title: "Reg. Number",
+              content: regNumber,
+            ),
+            const Spacer(),
+            SpecWidget(
+              isLast: true,
+              title: "Availablity",
+              content: qty.toString(),
+            ),
+          ],
+        ),
       ],
     );
   }
