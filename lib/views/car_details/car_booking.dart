@@ -166,6 +166,7 @@ class _CarBookingState extends State<CarBooking> {
                               insuranceType: insuranceType,
                               pickupDate: pickupDate,
                               returnDate: returnDate,
+                              qty: 1,
                               status: '',
                             );
 

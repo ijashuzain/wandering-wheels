@@ -132,7 +132,7 @@ class _StarterPageState extends State<StarterPage> {
       UserData? user = provider.currentUser;
       if (user != null) {
         await context.read<CategoryProvider>().fetchCategories();
-        await context.read<CarProvider>().fetchCars();
+        await context.read<CarProvider>().fetchCars(context);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Navigation()),

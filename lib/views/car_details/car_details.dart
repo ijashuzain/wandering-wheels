@@ -111,7 +111,8 @@ class _CarDetailsState extends State<CarDetails> {
                                   seats: provider.currentCar!.seats.toString(),
                                   fuel: provider.currentCar!.fuel,
                                   qty: provider.currentCar!.quantity,
-                                  
+                                  lat: double.parse(provider.currentCar!.pickupLat),
+                                  lng: double.parse(provider.currentCar!.pickupLng),
                                 ),
                                 SizedBox(height: 3.h),
                                 userProvider.currentUser!.type == "Admin"
@@ -133,41 +134,52 @@ class _CarDetailsState extends State<CarDetails> {
                       child: Padding(
                         padding: EdgeInsets.all(5.w),
                         child: Consumer<CarProvider>(
-                            builder: (context, provider, child) {
-                          return CButton(
-                            title: "Edit",
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CarCreate(
-                                    car: provider.currentCar!,
-                                    isUpdate: true,
+                          builder: (context, provider, child) {
+                            return CButton(
+                              title: "Edit",
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CarCreate(
+                                      car: provider.currentCar!,
+                                      isUpdate: true,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        }),
-                      ),
-                    )
-                  : Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.all(5.w),
-                        child: CButton(
-                          title: "Book Now",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CarBooking(),
-                              ),
+                                );
+                              },
                             );
                           },
                         ),
                       ),
+                    )
+                  : Consumer<CarProvider>(
+                      builder: (context, provider, child) {
+                        return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.all(5.w),
+                            child: provider.currentCar!.isAvailable!
+                                ? CButton(
+                                    title: "Book Now",
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CarBooking(),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : CButton(
+                                    title: "Not Available",
+                                    isDisabled: true,
+                                    onTap: () {},
+                                  ),
+                          ),
+                        );
+                      },
                     )
             ],
           ),

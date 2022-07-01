@@ -1,11 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:wandering_wheels/models/category_model.dart';
+import 'package:wandering_wheels/providers/booking_provider.dart';
 
 class CarProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -48,12 +49,16 @@ class CarProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  fetchCars() async {
+  fetchCars(BuildContext context) async {
     setCarLoading(true);
     var ref = await db.collection('cars').get();
     cars = [];
     for (var doc in ref.docs) {
       Car car = Car.fromJson(doc.data());
+      var bookedCount = await context.read<BookingProvider>().checkCarAvailability(carId: car.id!);
+      if(bookedCount >= car.quantity){
+        car.isAvailable = false;
+      }
       cars.add(car);
       notifyListeners();
     }
@@ -61,6 +66,7 @@ class CarProvider extends ChangeNotifier {
   }
 
   uploadCar({
+    required BuildContext context,
     bool isUpdate = false,
     String? currentImage,
     File? image,
@@ -95,7 +101,7 @@ class CarProvider extends ChangeNotifier {
       car.id = id;
       try {
         await db.collection("cars").doc(id).set(car.toMap());
-        await fetchCars();
+        await fetchCars(context);
         _setUploadingCar(false);
         onSuccess("Car has created successfully");
       } catch (e) {
@@ -109,6 +115,7 @@ class CarProvider extends ChangeNotifier {
   }
 
   deleteCar({
+    required BuildContext context,
     File? image,
     required Car car,
     required Function(String) onSuccess,
@@ -117,7 +124,7 @@ class CarProvider extends ChangeNotifier {
     _setDeletingCar(true);
     try {
       await db.collection("cars").doc(car.id).delete();
-      await fetchCars();
+      await fetchCars(context);
       _setDeletingCar(false);
       onSuccess("Car has deleted successfully");
     } catch (e) {
@@ -146,8 +153,8 @@ class CarProvider extends ChangeNotifier {
     }
   }
 
-  fetchCarsByCategory(Category category) async {
-    await fetchCars();
+  fetchCarsByCategory(Category category,BuildContext context) async {
+    await fetchCars(context);
     categoryCars =
         cars.where((element) => category.id == element.categoryId).toList();
     notifyListeners();

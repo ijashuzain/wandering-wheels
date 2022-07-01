@@ -21,6 +21,8 @@ class BookingProvider extends ChangeNotifier {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   Car dummyCar = Car(
+    pickupLat: '0',
+    pickupLng: '0',
     name: "No Car Found",
     rate: 0,
     categoryId: "NONE",
@@ -38,7 +40,7 @@ class BookingProvider extends ChangeNotifier {
   fetchAllBookings(BuildContext context) async {
     _setAllBookingLoading(true);
     var ref = await db.collection('bookings').get();
-    await context.read<CarProvider>().fetchCars();
+    await context.read<CarProvider>().fetchCars(context);
     List<Car> cars = context.read<CarProvider>().cars;
     allBookings = [];
     for (var doc in ref.docs) {
@@ -78,7 +80,7 @@ class BookingProvider extends ChangeNotifier {
     _setMyBookingLoading(true);
     var user = context.read<UserProvider>().currentUser;
     var ref = await db.collection('bookings').where('userId', isEqualTo: user!.id).get();
-    await context.read<CarProvider>().fetchCars();
+    await context.read<CarProvider>().fetchCars(context);
     List<Car> cars = context.read<CarProvider>().cars;
     log(cars.length.toString());
     myBookings = [];
@@ -131,6 +133,19 @@ class BookingProvider extends ChangeNotifier {
     } catch (e) {
       _setBookingUpdating(false);
       log(e.toString());
+    }
+  }
+
+  Future<int> checkCarAvailability({required String carId}) async {
+    int totalBookings = 0;
+    try{
+      var docRef = await db.collection("bookings").where("status",isEqualTo: BookingStatus.onroad).where("carId",isEqualTo: carId).get();
+      if(docRef.docs.isNotEmpty){
+        totalBookings = docRef.docs.length;
+      }
+      return totalBookings;
+    }catch(e){
+      return totalBookings;
     }
   }
 

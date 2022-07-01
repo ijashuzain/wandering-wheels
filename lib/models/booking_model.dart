@@ -17,6 +17,7 @@ class Booking {
   String? returnedDate;
   double? latitude;
   double? longitude;
+  int qty;
   String rate;
 
   Booking({
@@ -32,6 +33,7 @@ class Booking {
     required this.userId,
     required this.bookingId,
     required this.insuranceType,
+    required this.qty,
     required this.returnedDate,
     this.latitude,
     this.longitude,
@@ -54,6 +56,7 @@ class Booking {
         latitude = json['latitude'] ?? 0,
         longitude = json['longitude'] ?? 0,
         car = json['car'],
+        qty = json['qty'],
         rate = json['rate'] ?? '';
 
   Map<String, dynamic> toJson() => {
@@ -71,6 +74,7 @@ class Booking {
         "car": car,
         "insuranceType": insuranceType,
         "latitude": latitude,
+        "qty" : qty,
         "longitude": longitude,
         'rate': rate,
       };

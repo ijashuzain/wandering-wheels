@@ -8,12 +8,13 @@ class CButton extends StatelessWidget {
   final String title;
   final bool isDisabled;
   final VoidCallback onTap;
+  final bool expand;
   const CButton({
     Key? key,
     this.isLoading = false,
     required this.title,
     this.isDisabled = false,
-    required this.onTap,
+    required this.onTap, this.expand = false,
   }) : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class CButton extends StatelessWidget {
         }
       },
       child: Container(
-        width: 35.w,
+        width: expand ? 100.w : 35.w,
         height: 5.5.h,
         decoration: BoxDecoration(
           color: isDisabled ? kSecondaryColor : kPrimaryColor,

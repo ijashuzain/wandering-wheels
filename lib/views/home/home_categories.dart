@@ -57,7 +57,7 @@ class HomeCategory extends StatelessWidget {
                     provider.setCurrentCatagory(provider.categories[index]);
                     context
                         .read<CarProvider>()
-                        .fetchCarsByCategory(provider.categories[index]);
+                        .fetchCarsByCategory(provider.categories[index],context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

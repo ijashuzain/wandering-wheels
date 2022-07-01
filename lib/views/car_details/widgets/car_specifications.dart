@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/views/car_details/car_pickupmap.dart';
 import 'package:wandering_wheels/widgets/underlined_titile.dart';
 
 class CarSpecifications extends StatelessWidget {
@@ -12,6 +13,8 @@ class CarSpecifications extends StatelessWidget {
   final String seats;
   final String fuel;
   final String regNumber;
+  final double lat;
+  final double lng;
   const CarSpecifications({
     Key? key,
     required this.year,
@@ -20,7 +23,10 @@ class CarSpecifications extends StatelessWidget {
     required this.mileage,
     required this.seats,
     required this.fuel,
-    required this.regNumber, required this.qty,
+    required this.regNumber,
+    required this.qty,
+    required this.lat,
+    required this.lng,
   }) : super(key: key);
 
   @override
@@ -72,16 +78,51 @@ class CarSpecifications extends StatelessWidget {
         SizedBox(height: 3.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SpecWidget(
               isFirst: true,
               title: "Reg. Number",
               content: regNumber,
             ),
-            const Spacer(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Pickup Location",
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w500,
+                    color: kSecondaryColor,
+                    fontFamily: "Poppins",
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CarPickupMap(
+                          lat: lat,
+                          lng: lng,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: kPrimaryColor,
+                    child: Icon(
+                      Icons.map,
+                      size: 14.sp,
+                      color: kLiteColor,
+                    ),
+                  ),
+                )
+              ],
+            ),
             SpecWidget(
               isLast: true,
-              title: "Availablity",
+              title: "Total Cars",
               content: qty.toString(),
             ),
           ],

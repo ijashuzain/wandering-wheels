@@ -135,7 +135,7 @@ class SignupPage extends StatelessWidget {
                                   await context
                                       .read<CategoryProvider>()
                                       .fetchCategories();
-                                  await context.read<CarProvider>().fetchCars();
+                                  await context.read<CarProvider>().fetchCars(context);
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     Navigation.routeName,

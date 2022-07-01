@@ -9,7 +9,10 @@ class Car {
   int mileage;
   int seats;
   int quantity;
+  String pickupLat;
+  String pickupLng;
   String fuel;
+  bool? isAvailable;
   String regNumber;
   String? id;
 
@@ -23,10 +26,13 @@ class Car {
     required this.year,
     required this.mileage,
     required this.seats,
+    required this.pickupLat,
+    required this.pickupLng,
     required this.quantity,
     required this.fuel,
     required this.regNumber,
     this.id,
+    this.isAvailable,
   });
 
   Car.fromJson(
@@ -41,7 +47,10 @@ class Car {
         mileage = json['mileage'],
         seats = json['seats'],
         fuel = json['fuel'],
+        pickupLat = json['pickupLat'],
+        pickupLng = json['pickupLng'],
         id = json['id'],
+        isAvailable = json['isAvailable'] ?? true,
         regNumber = json['regNumber'],
         quantity = json['quantity'];
 
@@ -59,6 +68,9 @@ class Car {
       'fuel': fuel,
       'regNumber':regNumber,
       'quantity': quantity,
+      'pickupLat':pickupLat,
+      'pickupLng':pickupLng,
+      'isAvailable': isAvailable,
       'id': id
     };
   }

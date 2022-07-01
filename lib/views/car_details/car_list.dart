@@ -31,7 +31,7 @@ class CarList extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.read<CarProvider>().fetchCars();
+              context.read<CarProvider>().fetchCars(context);
             },
             icon: const Icon(Icons.refresh),
           ),

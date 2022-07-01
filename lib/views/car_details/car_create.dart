@@ -9,6 +9,7 @@ import 'package:wandering_wheels/models/car_model.dart';
 import 'package:wandering_wheels/models/category_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
+import 'package:wandering_wheels/views/car_details/car_pickupmap.dart';
 import 'package:wandering_wheels/widgets/button.dart';
 import 'package:wandering_wheels/widgets/image_picker.dart';
 import 'package:wandering_wheels/widgets/text_field.dart';
@@ -37,6 +38,9 @@ class _CarCreateState extends State<CarCreate> {
   TextEditingController quantityController = TextEditingController();
   TextEditingController regController = TextEditingController();
   TextEditingController fuelController = TextEditingController();
+
+  String? lat = '0';
+  String? lng = '0';
 
   File? image;
   String? categoryId;
@@ -67,6 +71,8 @@ class _CarCreateState extends State<CarCreate> {
       quantityController.text = widget.car?.quantity.toString() ?? '';
       fuelController.text = widget.car?.fuel ?? '';
       regController.text = widget.car?.regNumber ?? '';
+      lat = widget.car?.pickupLat ?? '0';
+      lng = widget.car?.pickupLng ?? '0';
     }
     super.initState();
   }
@@ -148,7 +154,32 @@ class _CarCreateState extends State<CarCreate> {
                       CTextField(
                           controller: quantityController,
                           hint: "Quantity Of Vehicles"),
-                      SizedBox(height: 10.h)
+                      CButton(
+                          expand: true,
+                          title: lat == '0' || lng == '0'
+                              ? "Select Pickup Location"
+                              : "Change Pickup Location",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return CarPickupMap(
+                                    lat: double.parse(lat!),
+                                    lng: double.parse(lng!),
+                                    isSelect: true,
+                                    onSelected: (loc) {
+                                      setState(() {
+                                        lat = loc.latitude.toString();
+                                        lng = loc.longitude.toString();
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                      SizedBox(height: 15.h)
                     ],
                   ),
                 ),
@@ -177,6 +208,8 @@ class _CarCreateState extends State<CarCreate> {
                               mileageController.text == '' ||
                               seatController.text == '' ||
                               fuelController.text == '' ||
+                              lat == null ||
+                              lng == null ||
                               regController.text == '' ||
                               quantityController.text == '') {
                             showDialog(
@@ -240,11 +273,14 @@ class _CarCreateState extends State<CarCreate> {
                             );
                           } else {
                             provider.uploadCar(
+                              context: context,
                               isUpdate: widget.isUpdate,
                               currentImage:
                                   widget.car != null ? widget.car!.image : null,
                               image: image,
                               car: Car(
+                                pickupLat: lat.toString(),
+                                pickupLng: lng.toString(),
                                 regNumber: regController.text,
                                 name: displayNameController.text,
                                 rate: int.parse(rateController.text),
@@ -334,6 +370,7 @@ class _CarCreateState extends State<CarCreate> {
                           title: "Delete",
                           onTap: () {
                             provider.deleteCar(
+                              context: context,
                               car: widget.car!,
                               onSuccess: (va) {
                                 Navigator.pop(context);
