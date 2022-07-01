@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
@@ -54,10 +55,12 @@ class SignupPage extends StatelessWidget {
                     CTextField(
                       controller: emailController,
                       hint: "Email",
+                      type: TextInputType.emailAddress,
                     ),
                     CTextField(
                       controller: phoneController,
                       hint: "Phone",
+                      type: TextInputType.phone,
                     ),
                     CTextField(
                       controller: placeController,
@@ -116,6 +119,36 @@ class SignupPage extends StatelessWidget {
                           ],
                         ),
                       );
+                    } else if (phoneController.text.length != 10) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                            "Error",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              color: kPrimaryColor,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          content: Text(
+                            "Please enter 10 digit mobile number",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              color: kSecondaryColor,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          actions: [
+                            FlatButton(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     } else {
                       await provider.signup(
                         context: context,
@@ -135,7 +168,9 @@ class SignupPage extends StatelessWidget {
                                   await context
                                       .read<CategoryProvider>()
                                       .fetchCategories();
-                                  await context.read<CarProvider>().fetchCars(context);
+                                  await context
+                                      .read<CarProvider>()
+                                      .fetchCars(context);
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     Navigation.routeName,
@@ -153,9 +188,7 @@ class SignupPage extends StatelessWidget {
                         },
                         onError: (val) {
                           Globals.showCustomDialog(
-                              context: context,
-                              title: "Error",
-                              content: val);
+                              context: context, title: "Error", content: val);
                           log(val);
                         },
                       );

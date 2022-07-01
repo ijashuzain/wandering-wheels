@@ -138,20 +138,29 @@ class _CarCreateState extends State<CarCreate> {
                         },
                       ),
                       CTextField(
-                          controller: rateController, hint: "Rate Per Day"),
+                          type: TextInputType.number,
+                          controller: rateController,
+                          hint: "Rate Per Day"),
                       CTextField(
                           controller: manufacturerController,
                           hint: "Manufacturer"),
                       CTextField(controller: modelController, hint: "Model"),
-                      CTextField(controller: yearController, hint: "Year"),
+                      CTextField(
+                          type: TextInputType.number,
+                          controller: yearController,
+                          hint: "Year"),
                       CTextField(
                           controller: mileageController, hint: "Mileage"),
                       CTextField(
                           controller: regController,
                           hint: "Registration Number"),
-                      CTextField(controller: seatController, hint: "Seats"),
+                      CTextField(
+                          type: TextInputType.number,
+                          controller: seatController,
+                          hint: "Seats"),
                       CTextField(controller: fuelController, hint: "Fuel"),
                       CTextField(
+                          type: TextInputType.number,
                           controller: quantityController,
                           hint: "Quantity Of Vehicles"),
                       CButton(

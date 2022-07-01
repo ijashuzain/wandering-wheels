@@ -75,7 +75,7 @@ class _BookingAllState extends State<BookingAll> {
                   Padding(
                     padding: EdgeInsets.only(right: 3.h, left: 3.h),
                     child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: provider.allBookings.length,
                       itemBuilder: (context, index) {

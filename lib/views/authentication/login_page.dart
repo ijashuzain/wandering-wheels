@@ -50,8 +50,11 @@ class LoginPage extends StatelessWidget {
                     CTextField(
                       controller: usernameController,
                       hint: "Username",
+                      type: TextInputType.emailAddress,
                     ),
                     CTextField(
+                      type: TextInputType.visiblePassword,
+                      isPassword: true,
                       controller: passwordController,
                       hint: "Password",
                     ),

@@ -99,8 +99,8 @@ class _CarBookingState extends State<CarBooking> {
                       SizedBox(height: 6.h),
                       const UnderlinedHeading("Driver Details"),
                       CTextField(controller: nameController, hint: "Name"),
-                      CTextField(controller: phoneController, hint: "Phone"),
-                      CTextField(controller: emailController, hint: "Email"),
+                      CTextField(controller: phoneController, hint: "Phone",type: TextInputType.phone,),
+                      CTextField(controller: emailController, hint: "Email",type: TextInputType.emailAddress,),
                       CTextField(controller: placeController, hint: "Place"),
                       SizedBox(height: 8.h),
                     ],
@@ -190,6 +190,37 @@ class _CarBookingState extends State<CarBooking> {
                                   ),
                                   content: Text(
                                     "Please fill all fields",
+                                    style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: kSecondaryColor,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      child: const Text("OK"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                              return;
+                            } else if(phoneController.text.length ==10){
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    "Oops",
+                                    style: TextStyle(
+                                      fontFamily: "Poppins",
+                                      color: kPrimaryColor,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    "Please enter 10 digit mobile number",
                                     style: TextStyle(
                                       fontFamily: "Poppins",
                                       color: kSecondaryColor,

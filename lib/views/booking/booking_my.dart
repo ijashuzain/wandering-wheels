@@ -140,7 +140,7 @@ class _MyBookingState extends State<MyBooking> {
                       padding: EdgeInsets.only(right: 3.h, left: 3.h),
                       child: userProvider.currentUser!.type == "Admin"
                           ? ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: provider.allBookings.length,
                               itemBuilder: (context, index) {

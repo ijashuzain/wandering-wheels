@@ -5,11 +5,13 @@ class CTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final bool isDisabled;
+  final TextInputType? type;
+  final isPassword;
   const CTextField({
     Key? key,
     required this.controller,
     required this.hint,
-    this.isDisabled = false,
+    this.isDisabled = false, this.type, this.isPassword = false,
   }) : super(key: key);
 
   @override
@@ -19,8 +21,11 @@ class CTextField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         enabled: !isDisabled,
+        keyboardType: type,
+        obscureText: isPassword,
         decoration: InputDecoration(
           hintText: hint,
+
           hintStyle: TextStyle(
             fontFamily: "Poppins",
             fontWeight: FontWeight.w500,
