@@ -6,7 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:wandering_wheels/models/category_model.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/booking_provider.dart';
+import 'package:wandering_wheels/providers/user_provider.dart';
 
 class CarProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -14,7 +16,8 @@ class CarProvider extends ChangeNotifier {
   bool isUploadingCar = false;
   bool isDeletingCar = false;
   List<Car> searchedCars = [];
-  List<Car> cars = [];
+  List<Car> allCars = [];
+  List<Car> dealerCars = [];
   List<Car> categoryCars = [];
   Car? currentCar;
   bool isSearching = false;
@@ -39,7 +42,7 @@ class CarProvider extends ChangeNotifier {
       return;
     } else {
       setIsSearching(true);
-      for (var car in cars) {
+      for (var car in allCars) {
         if (car.name.toLowerCase().contains(searchQuery.toLowerCase())) {
           searchedCars.add(car);
           notifyListeners();
@@ -49,17 +52,41 @@ class CarProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  fetchCars(BuildContext context) async {
+  fetchAllCars(BuildContext context) async {
     setCarLoading(true);
     var ref = await db.collection('cars').get();
-    cars = [];
+    allCars = [];
     for (var doc in ref.docs) {
       Car car = Car.fromJson(doc.data());
-      var bookedCount = await context.read<BookingProvider>().checkCarAvailability(carId: car.id!);
-      if(bookedCount >= car.quantity){
+      var bookedCount = await context
+          .read<BookingProvider>()
+          .checkCarAvailability(carId: car.id!);
+      if (bookedCount >= car.quantity) {
         car.isAvailable = false;
       }
-      cars.add(car);
+      allCars.add(car);
+      notifyListeners();
+    }
+    setCarLoading(false);
+  }
+
+  fetchDealerCars(BuildContext context) async {
+    setCarLoading(true);
+    UserData user = context.read<UserProvider>().currentUser!;
+    var ref = await db
+        .collection('cars')
+        .where('dealerId', isEqualTo: user.id!)
+        .get();
+    dealerCars = [];
+    for (var doc in ref.docs) {
+      Car car = Car.fromJson(doc.data());
+      var bookedCount = await context
+          .read<BookingProvider>()
+          .checkCarAvailability(carId: car.id!);
+      if (bookedCount >= car.quantity) {
+        car.isAvailable = false;
+      }
+      dealerCars.add(car);
       notifyListeners();
     }
     setCarLoading(false);
@@ -87,7 +114,6 @@ class CarProvider extends ChangeNotifier {
       } else {
         url = currentImage!;
       }
-      
     } else {
       var docRef = db.collection("cars").doc();
       id = docRef.id;
@@ -101,7 +127,8 @@ class CarProvider extends ChangeNotifier {
       car.id = id;
       try {
         await db.collection("cars").doc(id).set(car.toMap());
-        await fetchCars(context);
+        await fetchAllCars(context);
+        await fetchDealerCars(context);
         _setUploadingCar(false);
         onSuccess("Car has created successfully");
       } catch (e) {
@@ -124,7 +151,7 @@ class CarProvider extends ChangeNotifier {
     _setDeletingCar(true);
     try {
       await db.collection("cars").doc(car.id).delete();
-      await fetchCars(context);
+      await fetchAllCars(context);
       _setDeletingCar(false);
       onSuccess("Car has deleted successfully");
     } catch (e) {
@@ -153,10 +180,10 @@ class CarProvider extends ChangeNotifier {
     }
   }
 
-  fetchCarsByCategory(Category category,BuildContext context) async {
-    await fetchCars(context);
+  fetchCarsByCategory(Category category, BuildContext context) async {
+    await fetchAllCars(context);
     categoryCars =
-        cars.where((element) => category.id == element.categoryId).toList();
+        allCars.where((element) => category.id == element.categoryId).toList();
     notifyListeners();
   }
 

@@ -8,6 +8,7 @@ import 'package:wandering_wheels/constants/status.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wandering_wheels/models/booking_model.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 
@@ -21,6 +22,7 @@ class BookingProvider extends ChangeNotifier {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   Car dummyCar = Car(
+    dealerId: "",
     pickupLat: '0',
     pickupLng: '0',
     name: "No Car Found",
@@ -39,9 +41,10 @@ class BookingProvider extends ChangeNotifier {
 
   fetchAllBookings(BuildContext context) async {
     _setAllBookingLoading(true);
+    UserData user = context.read<UserProvider>().currentUser!;
     var ref = await db.collection('bookings').get();
-    await context.read<CarProvider>().fetchCars(context);
-    List<Car> cars = context.read<CarProvider>().cars;
+    await context.read<CarProvider>().fetchAllCars(context);
+    List<Car> cars = context.read<CarProvider>().allCars;
     allBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
@@ -54,8 +57,10 @@ class BookingProvider extends ChangeNotifier {
         (car) => car.id == booking.carId,
         orElse: () => dummyCar,
       );
-      booking.car = car;
-      allBookings.add(booking);
+      if (car.dealerId == user.id) {
+        booking.car = car;
+        allBookings.add(booking);
+      }
       notifyListeners();
     }
     _setAllBookingLoading(false);
@@ -63,9 +68,11 @@ class BookingProvider extends ChangeNotifier {
 
   Future<bool> _checkForDue(Booking booking) async {
     if (booking.status != BookingStatus.overdue) {
-      var differance = DateTime.now().difference(DateTime.parse(booking.returnDate)).inDays;
+      var differance =
+          DateTime.now().difference(DateTime.parse(booking.returnDate)).inDays;
       if (differance > 0) {
-        await updateBookingStatus(status: BookingStatus.overdue, id: booking.bookingId);
+        await updateBookingStatus(
+            status: BookingStatus.overdue, id: booking.bookingId);
         return true;
       } else {
         return false;
@@ -79,9 +86,12 @@ class BookingProvider extends ChangeNotifier {
     log("Fetching My Bookings");
     _setMyBookingLoading(true);
     var user = context.read<UserProvider>().currentUser;
-    var ref = await db.collection('bookings').where('userId', isEqualTo: user!.id).get();
-    await context.read<CarProvider>().fetchCars(context);
-    List<Car> cars = context.read<CarProvider>().cars;
+    var ref = await db
+        .collection('bookings')
+        .where('userId', isEqualTo: user!.id)
+        .get();
+    await context.read<CarProvider>().fetchAllCars(context);
+    List<Car> cars = context.read<CarProvider>().allCars;
     log(cars.length.toString());
     myBookings = [];
     for (var doc in ref.docs) {
@@ -126,7 +136,9 @@ class BookingProvider extends ChangeNotifier {
       await db.collection("bookings").doc(id).update(
         {
           "status": status,
-          "returnedDate": status == BookingStatus.completed ? DateFormat('yyyy-MM-dd').format(DateTime.now()) : '',
+          "returnedDate": status == BookingStatus.completed
+              ? DateFormat('yyyy-MM-dd').format(DateTime.now())
+              : '',
         },
       );
       _setBookingUpdating(false);
@@ -138,13 +150,22 @@ class BookingProvider extends ChangeNotifier {
 
   Future<int> checkCarAvailability({required String carId}) async {
     int totalBookings = 0;
-    try{
-      var docRef = await db.collection("bookings").where("status",isEqualTo: BookingStatus.onroad).where("carId",isEqualTo: carId).get();
-      if(docRef.docs.isNotEmpty){
-        totalBookings = docRef.docs.length;
+    try {
+      var docRef = await db.collection("bookings").get();
+      if (docRef.docs.isNotEmpty) {
+        List<Booking> dummyList = [];
+        for (var element in docRef.docs) {
+          Booking booking = Booking.fromJson(element.data());
+          if (booking.status == BookingStatus.onroad ||
+              booking.status == BookingStatus.returnRequest ||
+              booking.status == BookingStatus.overdue) {
+            dummyList.add(booking);
+          }
+        }
+        totalBookings = dummyList.length;
       }
       return totalBookings;
-    }catch(e){
+    } catch (e) {
       return totalBookings;
     }
   }

@@ -23,7 +23,7 @@ class HomeCars extends StatelessWidget {
             ),
           );
         }
-        if (provider.cars.isEmpty) {
+        if (provider.allCars.isEmpty) {
           return SizedBox(
             height: 40.w,
             width: 100.w,
@@ -44,14 +44,14 @@ class HomeCars extends StatelessWidget {
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemCount: provider.cars.length,
+            itemCount: provider.allCars.length,
             itemBuilder: (context, index) {
               return CarCard(
-                carName: provider.cars[index].name,
-                carImage: provider.cars[index].image!,
-                carRate: provider.cars[index].rate.toString(),
+                carName: provider.allCars[index].name,
+                carImage: provider.allCars[index].image!,
+                carRate: provider.allCars[index].rate.toString(),
                 onTap: () {
-                  provider.setCurrentCar(provider.cars[index]);
+                  provider.setCurrentCar(provider.allCars[index]);
                   Navigator.pushNamed(
                     context,
                     CarDetails.routeName,

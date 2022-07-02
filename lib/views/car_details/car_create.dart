@@ -7,8 +7,10 @@ import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:wandering_wheels/models/category_model.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
+import 'package:wandering_wheels/providers/user_provider.dart';
 import 'package:wandering_wheels/views/car_details/car_pickupmap.dart';
 import 'package:wandering_wheels/widgets/button.dart';
 import 'package:wandering_wheels/widgets/image_picker.dart';
@@ -281,6 +283,8 @@ class _CarCreateState extends State<CarCreate> {
                               ),
                             );
                           } else {
+                            UserData user =
+                                context.read<UserProvider>().currentUser!;
                             provider.uploadCar(
                               context: context,
                               isUpdate: widget.isUpdate,
@@ -288,6 +292,7 @@ class _CarCreateState extends State<CarCreate> {
                                   widget.car != null ? widget.car!.image : null,
                               image: image,
                               car: Car(
+                                dealerId: user.id!,
                                 pickupLat: lat.toString(),
                                 pickupLng: lng.toString(),
                                 regNumber: regController.text,

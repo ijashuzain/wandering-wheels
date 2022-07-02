@@ -6,6 +6,7 @@ import 'package:wandering_wheels/constants/colors.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
+import 'package:wandering_wheels/utils/providers.dart';
 import 'package:wandering_wheels/views/car_details/car_booking.dart';
 import 'package:wandering_wheels/views/car_details/car_create.dart';
 import 'package:wandering_wheels/views/car_details/widgets/car_specifications.dart';
@@ -111,8 +112,10 @@ class _CarDetailsState extends State<CarDetails> {
                                   seats: provider.currentCar!.seats.toString(),
                                   fuel: provider.currentCar!.fuel,
                                   qty: provider.currentCar!.quantity,
-                                  lat: double.parse(provider.currentCar!.pickupLat),
-                                  lng: double.parse(provider.currentCar!.pickupLng),
+                                  lat: double.parse(
+                                      provider.currentCar!.pickupLat),
+                                  lng: double.parse(
+                                      provider.currentCar!.pickupLng),
                                 ),
                                 SizedBox(height: 3.h),
                                 userProvider.currentUser!.type == "Admin"
@@ -129,31 +132,37 @@ class _CarDetailsState extends State<CarDetails> {
                 );
               }),
               userProvider.currentUser!.type == "Admin"
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: EdgeInsets.all(5.w),
-                        child: Consumer<CarProvider>(
-                          builder: (context, provider, child) {
-                            return CButton(
-                              title: "Edit",
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CarCreate(
-                                      car: provider.currentCar!,
-                                      isUpdate: true,
+                  ? Consumer<CarProvider>(builder: (context, provider, child) {
+                      if (provider.currentCar!.dealerId !=
+                          userProvider.currentUser!.id) {
+                        return const SizedBox();
+                      }
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(5.w),
+                          child: Consumer<CarProvider>(
+                            builder: (context, provider, child) {
+                              return CButton(
+                                title: "Edit",
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CarCreate(
+                                        car: provider.currentCar!,
+                                        isUpdate: true,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    )
+                      );
+                    })
                   : Consumer<CarProvider>(
                       builder: (context, provider, child) {
                         return Align(

@@ -44,42 +44,62 @@ class CategoryProvider extends ChangeNotifier {
   }) async {
     _setUploadingCategory(true);
     String url = '';
-    log(isUpdate.toString());
-    if (isUpdate) {
-      if (image == null) {
-        url = currentImage!;
+    bool result = await _checkCategoryNameAlreadyAdded(categoryName);
+    if (!result) {
+      log(isUpdate.toString());
+      if (isUpdate) {
+        if (image == null) {
+          url = currentImage!;
+        } else {
+          url = await uploadCategoryImage(
+            categoryId: categoryId,
+            image: image,
+          );
+        }
       } else {
+        categoryId = db.collection("categories").doc().id;
         url = await uploadCategoryImage(
           categoryId: categoryId,
           image: image,
         );
       }
-    } else {
-      categoryId = db.collection("categories").doc().id;
-      url = await uploadCategoryImage(
-        categoryId: categoryId,
-        image: image,
-      );
-    }
-    if (url != '') {
-      Category category = Category(
-        id: categoryId,
-        name: categoryName,
-        image: url,
-      );
-      try {
-        await db.collection("categories").doc(categoryId).set(category.toMap());
-        await fetchCategories();
+      if (url != '') {
+        Category category = Category(
+          id: categoryId,
+          name: categoryName,
+          image: url,
+        );
+        try {
+          await db
+              .collection("categories")
+              .doc(categoryId)
+              .set(category.toMap());
+          await fetchCategories();
+          _setUploadingCategory(false);
+          onSuccess("Category has created successfully");
+        } catch (e) {
+          _setUploadingCategory(false);
+          onError(e.toString());
+        }
+      } else {
         _setUploadingCategory(false);
-        onSuccess("Category has created successfully");
-      } catch (e) {
-        _setUploadingCategory(false);
-        onError(e.toString());
+        onError("Error uploading image");
       }
     } else {
       _setUploadingCategory(false);
-      onError("Error uploading image");
+      onError("This category already added");
     }
+  }
+
+  _checkCategoryNameAlreadyAdded(String categoryName) async {
+    await fetchCategories();
+    bool returnResult = false;
+    for (var element in categories) {
+      if (element.name == categoryName) {
+        returnResult = true;
+      }
+    }
+    return returnResult;
   }
 
   deleteCategory({

@@ -14,18 +14,32 @@ import 'package:wandering_wheels/views/home/home_main.dart';
 import 'package:wandering_wheels/views/navigation/navigation.dart';
 import 'package:wandering_wheels/widgets/auth_title.dart';
 import 'package:wandering_wheels/widgets/button.dart';
+import 'package:wandering_wheels/widgets/radio.dart';
 import 'package:wandering_wheels/widgets/text_field.dart';
 import 'package:provider/provider.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   static String routeName = "/signup";
   SignupPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController placeController = TextEditingController();
+
+  int userType = 0;
+
+  @override
+  void initState() {
+    userType = 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +61,43 @@ class SignupPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 5.h, right: 5.h),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      "Register As",
+                      style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.sp,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        CRadio(
+                          isHorizontal: true,
+                          title: "Customer",
+                          value: 0,
+                          groupValue: userType,
+                          onChanged: (val) {
+                            setState(() {
+                              userType = val;
+                            });
+                          },
+                        ),
+                        const Spacer(),
+                        CRadio(
+                          isHorizontal: true,
+                          title: "Dealer",
+                          value: 1,
+                          groupValue: userType,
+                          onChanged: (val) {
+                            setState(() {
+                              userType = val;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                     CTextField(
                       controller: nameController,
                       hint: "Name",
@@ -158,7 +208,7 @@ class SignupPage extends StatelessWidget {
                           name: nameController.text,
                           email: emailController.text,
                           phone: phoneController.text,
-                          type: "Member",
+                          type: userType == 0 ? "Member" : "Admin",
                           trackMe: false,
                         ),
                         onSuccess: (val) async {
@@ -170,7 +220,7 @@ class SignupPage extends StatelessWidget {
                                       .fetchCategories();
                                   await context
                                       .read<CarProvider>()
-                                      .fetchCars(context);
+                                      .fetchAllCars(context);
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     Navigation.routeName,

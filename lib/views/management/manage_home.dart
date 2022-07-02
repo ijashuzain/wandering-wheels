@@ -90,7 +90,7 @@ class ManageHome extends StatelessWidget {
                       subtitle: "Total cars",
                       icon: Icons.car_repair_rounded,
                       onTap: () {
-                        context.read<CarProvider>().fetchCars(context);
+                        context.read<CarProvider>().fetchDealerCars(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

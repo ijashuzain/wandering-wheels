@@ -39,6 +39,11 @@ class _CarBookingState extends State<CarBooking> {
   void initState() {
     pickupDate = "";
     returnDate = "";
+
+    UserData user = context.read<UserProvider>().currentUser!;
+    nameController.text = user.name;
+    emailController.text = user.email;
+    phoneController.text = user.phone;
     super.initState();
   }
 
@@ -99,8 +104,16 @@ class _CarBookingState extends State<CarBooking> {
                       SizedBox(height: 6.h),
                       const UnderlinedHeading("Driver Details"),
                       CTextField(controller: nameController, hint: "Name"),
-                      CTextField(controller: phoneController, hint: "Phone",type: TextInputType.phone,),
-                      CTextField(controller: emailController, hint: "Email",type: TextInputType.emailAddress,),
+                      CTextField(
+                        controller: phoneController,
+                        hint: "Phone",
+                        type: TextInputType.phone,
+                      ),
+                      CTextField(
+                        controller: emailController,
+                        hint: "Email",
+                        type: TextInputType.emailAddress,
+                      ),
                       CTextField(controller: placeController, hint: "Place"),
                       SizedBox(height: 8.h),
                     ],
@@ -207,7 +220,7 @@ class _CarBookingState extends State<CarBooking> {
                                 ),
                               );
                               return;
-                            } else if(phoneController.text.length ==10){
+                            } else if (phoneController.text.length != 10) {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(

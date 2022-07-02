@@ -118,7 +118,9 @@ class LoginPage extends StatelessWidget {
                                   await context
                                       .read<CategoryProvider>()
                                       .fetchCategories();
-                                  await context.read<CarProvider>().fetchCars(context);
+                                  await context
+                                      .read<CarProvider>()
+                                      .fetchAllCars(context);
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       Navigation.routeName, ((route) => false));
                                 },
@@ -133,9 +135,7 @@ class LoginPage extends StatelessWidget {
                         },
                         onError: (val) {
                           Globals.showCustomDialog(
-                              context: context,
-                              title: "Error",
-                              content: val);
+                              context: context, title: "Error", content: val);
                           log(val);
                         },
                       );

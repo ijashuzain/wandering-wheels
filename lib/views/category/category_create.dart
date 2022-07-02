@@ -205,7 +205,6 @@ class _CategoryCreateState extends State<CategoryCreate> {
                               },
                               onError: (val) {
                                 log(val);
-                                categoryNameController.clear();
                                 image = null;
                                 showDialog(
                                   context: context,

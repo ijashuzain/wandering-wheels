@@ -31,7 +31,11 @@ class CarList extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              context.read<CarProvider>().fetchCars(context);
+              if (isEdit) {
+                context.read<CarProvider>().fetchDealerCars(context);
+              } else {
+                context.read<CarProvider>().fetchAllCars(context);
+              }
             },
             icon: const Icon(Icons.refresh),
           ),
@@ -48,7 +52,7 @@ class CarList extends StatelessWidget {
           : null,
       body: Consumer<CarProvider>(
         builder: (context, provider, child) {
-          var cars = isCategory ? provider.categoryCars : provider.cars;
+          var cars = isCategory ? provider.categoryCars : isEdit ? provider.dealerCars : provider.allCars;
           if (provider.isLoading) {
             return const Center(
               child: CupertinoActivityIndicator(),

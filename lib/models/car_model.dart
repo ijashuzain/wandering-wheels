@@ -2,6 +2,7 @@ class Car {
   String name;
   String? image;
   int rate;
+  String dealerId;
   String categoryId;
   String manufacturer;
   String model;
@@ -30,6 +31,7 @@ class Car {
     required this.pickupLng,
     required this.quantity,
     required this.fuel,
+    required this.dealerId,
     required this.regNumber,
     this.id,
     this.isAvailable,
@@ -52,6 +54,7 @@ class Car {
         id = json['id'],
         isAvailable = json['isAvailable'] ?? true,
         regNumber = json['regNumber'],
+        dealerId = json['dealerId'],
         quantity = json['quantity'];
 
   toMap() {
@@ -66,11 +69,12 @@ class Car {
       'mileage': mileage,
       'seats': seats,
       'fuel': fuel,
-      'regNumber':regNumber,
+      'regNumber': regNumber,
       'quantity': quantity,
-      'pickupLat':pickupLat,
-      'pickupLng':pickupLng,
+      'pickupLat': pickupLat,
+      'pickupLng': pickupLng,
       'isAvailable': isAvailable,
+      'dealerId':dealerId,
       'id': id
     };
   }
