@@ -8,6 +8,9 @@ import 'package:wandering_wheels/views/management/manage_home.dart';
 import 'package:wandering_wheels/views/booking/booking_my.dart';
 import 'package:wandering_wheels/views/profile/profile.dart';
 
+import '../../providers/car_provider.dart';
+import '../../providers/category_provider.dart';
+
 class Navigation extends StatefulWidget {
   static String routeName = "/navigation";
   @override
@@ -27,6 +30,12 @@ class _NavigationState extends State<Navigation> {
 
   @override
   void initState() {
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async{
+      context.read<CategoryProvider>().fetchCategories();
+      context.read<CarProvider>().fetchAllCars(context);
+    });
+
     if (context.read<UserProvider>().currentUser!.type == "Admin") {
       _widgetOptions = <Widget>[
         Home(),

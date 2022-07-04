@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/views/car_details/car_pickupmap.dart';
 import 'package:wandering_wheels/widgets/underlined_titile.dart';
 
@@ -14,6 +15,7 @@ class CarSpecifications extends StatelessWidget {
   final String fuel;
   final String regNumber;
   final double lat;
+  final UserData owner;
   final double lng;
   const CarSpecifications({
     Key? key,
@@ -26,7 +28,7 @@ class CarSpecifications extends StatelessWidget {
     required this.regNumber,
     required this.qty,
     required this.lat,
-    required this.lng,
+    required this.lng, required this.owner,
   }) : super(key: key);
 
   @override
@@ -127,6 +129,27 @@ class CarSpecifications extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 3.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SpecWidget(
+              isFirst: true,
+              title: "Owner",
+              content: owner.name,
+            ),
+            SpecWidget(
+              title: "Owner Email",
+              content: owner.email,
+            ),
+            SpecWidget(
+              title: "Owner Phone",
+              isLast: true,
+              content: owner.phone,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -168,7 +191,7 @@ class SpecWidget extends StatelessWidget {
           Text(
             content,
             style: TextStyle(
-              fontSize: 10.sp,
+              fontSize: 9.sp,
               fontWeight: FontWeight.bold,
               color: kPrimaryColor,
               fontFamily: "Poppins",

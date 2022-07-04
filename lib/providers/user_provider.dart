@@ -58,6 +58,19 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<UserData?> getUser(String userId) async {
+    UserData? usr;
+    try {
+      var ref = await db.collection("users").doc(userId).get();
+      if (ref.data() != null) {
+        usr = UserData.fromJson(ref.data()!);
+      }
+      return usr;
+    } catch (e) {
+      return usr;
+    }
+  }
+
   Future<bool> checkLoggedIn() async {
     log("Checking Loggin");
     SharedPreferences localdb = await SharedPreferences.getInstance();

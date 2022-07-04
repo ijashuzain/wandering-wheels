@@ -115,10 +115,10 @@ class LoginPage extends StatelessWidget {
                           await context.read<UserProvider>().fetchUser(
                                 userId: val,
                                 onSuccess: (val) async {
-                                  await context
+                                   context
                                       .read<CategoryProvider>()
                                       .fetchCategories();
-                                  await context
+                                   context
                                       .read<CarProvider>()
                                       .fetchAllCars(context);
                                   Navigator.pushNamedAndRemoveUntil(context,

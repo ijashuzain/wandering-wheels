@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:wandering_wheels/constants/colors.dart';
+import 'package:wandering_wheels/models/car_model.dart';
+import 'package:wandering_wheels/models/user_model.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
 import 'package:wandering_wheels/providers/category_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
@@ -24,6 +26,18 @@ class CarDetails extends StatefulWidget {
 }
 
 class _CarDetailsState extends State<CarDetails> {
+  UserData? owner;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      Car car = context.read<CarProvider>().currentCar!;
+      owner = await context.read<UserProvider>().getUser(car.dealerId);
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +116,13 @@ class _CarDetailsState extends State<CarDetails> {
                                 ),
                                 SizedBox(height: 3.h),
                                 CarSpecifications(
+                                  owner: owner ??
+                                      UserData(
+                                          name: "",
+                                          email: "",
+                                          phone: "",
+                                          type: "",
+                                          trackMe: false),
                                   regNumber: provider.currentCar!.regNumber,
                                   year: provider.currentCar!.year.toString(),
                                   manufacturer:
