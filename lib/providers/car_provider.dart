@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:wandering_wheels/models/car_model.dart';
 import 'package:wandering_wheels/models/category_model.dart';
 import 'package:wandering_wheels/models/user_model.dart';
+import 'package:wandering_wheels/providers/analytics_provider.dart';
 import 'package:wandering_wheels/providers/booking_provider.dart';
 import 'package:wandering_wheels/providers/user_provider.dart';
 

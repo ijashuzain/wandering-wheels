@@ -7,7 +7,7 @@ class Car {
   String manufacturer;
   String model;
   int year;
-  int mileage;
+  String mileage;
   int seats;
   int quantity;
   String pickupLat;
@@ -46,7 +46,7 @@ class Car {
         manufacturer = json['manufacturer'],
         model = json['model'],
         year = json['year'],
-        mileage = json['mileage'],
+        mileage = json['mileage'].toString(),
         seats = json['seats'],
         fuel = json['fuel'],
         pickupLat = json['pickupLat'],

@@ -31,7 +31,7 @@ class BookingProvider extends ChangeNotifier {
     manufacturer: "NONE",
     model: "NONE",
     year: 1000,
-    mileage: 0,
+    mileage: "",
     seats: 0,
     regNumber: '',
     quantity: 0,

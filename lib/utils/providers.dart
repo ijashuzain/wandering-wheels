@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:wandering_wheels/providers/analytics_provider.dart';
 import 'package:wandering_wheels/providers/auth_provider.dart';
 import 'package:wandering_wheels/providers/booking_provider.dart';
 import 'package:wandering_wheels/providers/car_provider.dart';
@@ -20,4 +21,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => AuthProvider()),
   ChangeNotifierProvider(create: (_) => UserProvider()),
   ChangeNotifierProvider(create: (_) => MapProvider()),
+  ChangeNotifierProvider(create: (_) => AnalyticsProvider()),
 ];
