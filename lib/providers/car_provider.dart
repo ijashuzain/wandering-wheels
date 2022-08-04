@@ -62,6 +62,7 @@ class CarProvider extends ChangeNotifier {
       var bookedCount = await context
           .read<BookingProvider>()
           .checkCarAvailability(carId: car.id!);
+      log("Booked Count" + bookedCount.toString());
       if (bookedCount >= car.quantity) {
         car.isAvailable = false;
       }

@@ -21,7 +21,7 @@ class Globals {
         ),
         content: Text(
           content,
-          style:  TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 10.sp,
             fontFamily: "Poppins",
@@ -39,4 +39,6 @@ class Globals {
       ),
     );
   }
+
+  findDueDays(String returnDate) {}
 }

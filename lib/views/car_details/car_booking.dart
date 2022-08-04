@@ -255,7 +255,6 @@ class _CarBookingState extends State<CarBooking> {
                               context.read<BookingProvider>().addBooking(
                                     booking: booking,
                                     onSuccess: () {
-                                      Navigator.pop(context);
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(

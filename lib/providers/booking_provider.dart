@@ -48,37 +48,57 @@ class BookingProvider extends ChangeNotifier {
     allBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
-      bool result = await _checkForDue(booking);
-      if (result) {
-        booking.status = BookingStatus.overdue;
+      int? result = await checkForDue(booking);
+
+      log("due of -> ${booking.driverName} is -> $result");
+
+      if (result != null) {
+        if (booking.status == BookingStatus.onroad) {
+          booking.status = BookingStatus.overdue;
+        }
       }
       log(cars.length.toString());
       var car = cars.firstWhere(
         (car) => car.id == booking.carId,
         orElse: () => dummyCar,
       );
+      booking.car = car;
       if (car.dealerId == user.id) {
-        booking.car = car;
-        allBookings.add(booking);
+        if (result != null) {
+          if (booking.status == BookingStatus.pending) {
+            await deleteBooking(id: booking.bookingId);
+          } else {
+            allBookings.add(booking);
+          }
+        } else {
+          allBookings.add(booking);
+        }
       }
       notifyListeners();
     }
     _setAllBookingLoading(false);
   }
 
-  Future<bool> _checkForDue(Booking booking) async {
+  Future<int?> checkForDue(Booking booking) async {
     if (booking.status != BookingStatus.overdue) {
-      var differance =
-          DateTime.now().difference(DateTime.parse(booking.returnDate)).inDays;
-      if (differance > 0) {
-        await updateBookingStatus(
-            status: BookingStatus.overdue, id: booking.bookingId);
-        return true;
+      if (booking.status != BookingStatus.returnRequest) {
+        var differance = DateTime.now()
+            .difference(DateTime.parse(booking.returnDate))
+            .inDays;
+        if (differance > 0) {
+          if (booking.status == BookingStatus.onroad) {
+            await updateBookingStatus(
+                status: BookingStatus.overdue, id: booking.bookingId);
+          }
+          return differance;
+        } else {
+          return null;
+        }
       } else {
-        return false;
+        return null;
       }
     } else {
-      return false;
+      return null;
     }
   }
 
@@ -92,16 +112,34 @@ class BookingProvider extends ChangeNotifier {
         .get();
     await context.read<CarProvider>().fetchAllCars(context);
     List<Car> cars = context.read<CarProvider>().allCars;
-    log(cars.length.toString());
     myBookings = [];
     for (var doc in ref.docs) {
       Booking booking = Booking.fromJson(doc.data());
+      int? result = await checkForDue(booking);
+
+      log("due of -> ${booking.driverName} is -> $result");
+
+      if (result != null) {
+        if (booking.status == BookingStatus.onroad) {
+          booking.status = BookingStatus.overdue;
+        }
+      }
       var car = cars.firstWhere(
         (car) => car.id == booking.carId,
         orElse: () => dummyCar,
       );
       booking.car = car;
-      myBookings.add(booking);
+
+      if (result != null) {
+        if (booking.status == BookingStatus.pending) {
+          await deleteBooking(id: booking.bookingId);
+        } else {
+          myBookings.add(booking);
+        }
+      } else {
+        myBookings.add(booking);
+      }
+
       notifyListeners();
     }
     _setMyBookingLoading(false);
